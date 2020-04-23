@@ -13,11 +13,11 @@ class Cgal < Formula
   end
 
   depends_on "cmake" => [:build, :test]
+  depends_on "qt" => [:build, :test]
   depends_on "boost"
   depends_on "eigen"
   depends_on "gmp"
   depends_on "mpfr"
-  depends_on "qt" => [:build, :test]
 
   def install
     args = std_cmake_args + %w[
@@ -41,13 +41,13 @@ class Cgal < Formula
       typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
       typedef CGAL::Triangulation_2<K>                            Triangulation;
       typedef Triangulation::Point                                Point;
- 
+
       template <typename A, typename B>
-      typename CGAL::Coercion_traits<A,B>::Type	      
-      binary_func(const A& a , const B& b){	      
-          typedef CGAL::Coercion_traits<A,B> CT;	      
-          CGAL_static_assertion((CT::Are_explicit_interoperable::value));	      
-          typename CT::Cast cast;	        
+      typename CGAL::Coercion_traits<A,B>::Type
+      binary_func(const A& a , const B& b){
+          typedef CGAL::Coercion_traits<A,B> CT;
+          CGAL_static_assertion((CT::Are_explicit_interoperable::value));
+          typename CT::Cast cast;
           return cast(a)*cast(b);
       }
 
@@ -71,7 +71,8 @@ class Cgal < Formula
       add_executable(surprise surprise.cpp)
       target_link_libraries(surprise PUBLIC CGAL::CGAL_Qt5)
     EOS
-    system "cmake", "-L", "-DQt5_DIR=#{HOMEBREW_PREFIX}/opt/qt/lib/cmake/Qt5", "-DCMAKE_BUILD_RPATH=#{HOMEBREW_PREFIX}/lib", "-DCMAKE_PREFIX_PATH=#{prefix}", "."
+    system "cmake", "-L", "-DQt5_DIR=#{HOMEBREW_PREFIX}/opt/qt/lib/cmake/Qt5",
+           "-DCMAKE_BUILD_RPATH=#{HOMEBREW_PREFIX}/lib", "-DCMAKE_PREFIX_PATH=#{prefix}", "."
     system "cmake", "--build", ".", "-v"
     assert_equal "15\n15", shell_output("./surprise").chomp
   end
