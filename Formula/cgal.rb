@@ -3,6 +3,7 @@ class Cgal < Formula
   homepage "https://www.cgal.org/"
   url "https://github.com/CGAL/cgal/releases/download/releases%2FCGAL-5.0.2/CGAL-5.0.2.tar.xz"
   sha256 "bb3594ba390735404f0972ece301f369b1ff12646ad25e48056b4d49c976e1fa"
+  revision 1
 
   bottle do
     cellar :any_skip_relocation
@@ -50,7 +51,7 @@ class Cgal < Formula
           return cast(a)*cast(b);
       }
 
-      int main() {
+      int main(int argc, char**) {
         std::cout<< binary_func(double(3), int(5)) << std::endl;
         std::cout<< binary_func(int(3), double(5)) << std::endl;
         std::ifstream in("data/triangulation_prog1.cin");
@@ -58,7 +59,8 @@ class Cgal < Formula
         std::istream_iterator<Point> end;
         Triangulation t;
         t.insert(begin, end);
-        CGAL::draw(t);
+        if(argc == 3) // do not test Qt5 at runtime
+          CGAL::draw(t);
         return EXIT_SUCCESS;
        }
     EOS
@@ -71,5 +73,6 @@ class Cgal < Formula
     EOS
     system "cmake", "-L", "-DQt5_DIR=#{HOMEBREW_PREFIX}/opt/qt/lib/cmake/Qt5", "-DCMAKE_BUILD_RPATH=#{HOMEBREW_PREFIX}/lib", "-DCMAKE_PREFIX_PATH=#{prefix}", "."
     system "cmake", "--build", ".", "-v"
+    assert_equal "15\n15", shell_output("./surprise").chomp
   end
 end
