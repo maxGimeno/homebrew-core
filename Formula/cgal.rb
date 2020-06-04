@@ -71,7 +71,7 @@ class Cgal < Formula
       add_executable(surprise surprise.cpp)
       target_link_libraries(surprise PUBLIC CGAL::CGAL_Qt5)
     EOS
-    system "cmake", "-L", "-DQt5_DIR=#{HOMEBREW_PREFIX}/opt/qt/lib/cmake/Qt5",
+    system "cmake", "-L", "-DQt5_DIR=#{Formula["qt"].opt_lib}/cmake/Qt5",
            "-DCMAKE_BUILD_RPATH=#{HOMEBREW_PREFIX}/lib", "-DCMAKE_PREFIX_PATH=#{prefix}", "."
     system "cmake", "--build", ".", "-v"
     assert_equal "15\n15", shell_output("./surprise").chomp
