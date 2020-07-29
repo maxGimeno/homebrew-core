@@ -1,8 +1,8 @@
 class Cgal < Formula
   desc "Computational Geometry Algorithms Library"
   homepage "https://www.cgal.org/"
-  url "https://github.com/CGAL/cgal/releases/download/releases%2FCGAL-5.0.2/CGAL-5.0.2.tar.xz"
-  sha256 "bb3594ba390735404f0972ece301f369b1ff12646ad25e48056b4d49c976e1fa"
+  url "https://github.com/CGAL/cgal/releases/tag/releases%2FCGAL-5.1-beta2/CGAL-5.1-beta2.tar.xz"
+  sha256 "7f111880ec353e4111ab7ee4f522915361abd4be846f9f110addad6861b5f488"
   license "GPL-3.0"
   revision 1
 
