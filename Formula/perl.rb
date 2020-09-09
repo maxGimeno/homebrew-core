@@ -6,6 +6,11 @@ class Perl < Formula
   license "Artistic-1.0-Perl"
   head "https://github.com/perl/perl5.git", branch: "blead"
 
+  livecheck do
+    url "https://www.cpan.org/src/"
+    regex(/href=.*?perl[._-]v?(\d+\.\d*[02468](?:\.\d+)*)\.t/i)
+  end
+
   bottle do
     sha256 "bc6c97521b6edf723c8ee0742aebb1954b5c8fec81bf2d96861c3f8bcc4e404d" => :catalina
     sha256 "f09b3fefe2175b36e590ee13e7aa84d28ebcbce3ef8e252e24a0aebb752405ab" => :mojave
@@ -16,6 +21,13 @@ class Perl < Formula
 
   # Prevent site_perl directories from being removed
   skip_clean "lib/perl5/site_perl"
+
+  patch do
+    # Enable build support on macOS 11.x
+    # Remove when https://github.com/Perl/perl5/pull/17946 is merged
+    url "https://raw.githubusercontent.com/Homebrew/formula-patches/526faca9830646b974f563532fa27a1515e51ca1/perl/version_check.patch"
+    sha256 "cff250437f141eb677ec2215a9f2dfcbacba77304dac06499db6c722c9d30b58"
+  end
 
   def install
     args = %W[

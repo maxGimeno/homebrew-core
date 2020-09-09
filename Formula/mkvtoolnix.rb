@@ -1,15 +1,19 @@
 class Mkvtoolnix < Formula
   desc "Matroska media files manipulation tools"
   homepage "https://mkvtoolnix.download/"
-  url "https://mkvtoolnix.download/sources/mkvtoolnix-48.0.0.tar.xz"
-  sha256 "f22c443506ce630bb96f9ef1f704b02b0137883fa74babab1632f68679900a83"
-  license "GPL-2.0"
-  revision 1
+  url "https://mkvtoolnix.download/sources/mkvtoolnix-50.0.0.tar.xz"
+  sha256 "58a5d2c134e476386a1b391913d68d3e1c51dba70f6a33ca4b39c7b61c2e8824"
+  license "GPL-2.0-or-later"
+
+  livecheck do
+    url "https://mkvtoolnix.download/sources/"
+    regex(/href=.*?mkvtoolnix[._-]v?(\d+(?:\.\d+)+)\.t/i)
+  end
 
   bottle do
     cellar :any
-    sha256 "7e14ea2456fe8aa3435e9b835d782f1ff60dc6cf326bcf9dca840511ee96a6d5" => :catalina
-    sha256 "d9cdf539429485bff6b61a42503b0b52d84d4c420cb75de77eb1ecf643249cdd" => :mojave
+    sha256 "fa717adc2e65ff6cdfaa22cf86cb8de3686bc244d957a86254b77c3a86b10a39" => :catalina
+    sha256 "667354680ad9c61b853eae032f793f63c22ab4113197bb401e5dc7bfac78caec" => :mojave
   end
 
   head do
@@ -32,6 +36,7 @@ class Mkvtoolnix < Formula
   depends_on "libogg"
   depends_on "libvorbis"
   depends_on macos: :mojave # C++17
+  depends_on "pcre2"
 
   uses_from_macos "libxslt" => :build
   uses_from_macos "ruby" => :build

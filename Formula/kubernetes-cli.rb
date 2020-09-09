@@ -2,16 +2,21 @@ class KubernetesCli < Formula
   desc "Kubernetes command-line interface"
   homepage "https://kubernetes.io/"
   url "https://github.com/kubernetes/kubernetes.git",
-      tag:      "v1.18.6",
-      revision: "dff82dc0de47299ab66c83c626e08b245ab19037"
+      tag:      "v1.19.0",
+      revision: "e19964183377d0ec2052d1f1fa930c4d7575bd50"
   license "Apache-2.0"
   head "https://github.com/kubernetes/kubernetes.git"
 
+  livecheck do
+    url :head
+    regex(/^v([\d.]+)$/i)
+  end
+
   bottle do
     cellar :any_skip_relocation
-    sha256 "edd1688fe0f1d752df1d71e559839e50bf6b6ef78cd03ceac197c079c2465c8e" => :catalina
-    sha256 "f0da1d2a1f7bd4d687055aca461785107185b86e69dab008fc76dcf3d6cec170" => :mojave
-    sha256 "9e7cb0b726f65efa71868ce23541fefde252715fcfd36679f9fd0cb6bb0d411b" => :high_sierra
+    sha256 "46b7d96c97256a2a4a55fcbb8c72085a76ac6eac1b61a9d030d07ed7537f2c5c" => :catalina
+    sha256 "214b259580cd5d9c0a4c97c5bc56931a3ae86a035ce0c67bc1c12671bcb4f175" => :mojave
+    sha256 "b5a5d643326f9301164e1167d9ad21d9657a55da697da761cf5feb42be629ca2" => :high_sierra
   end
 
   depends_on "go" => :build
@@ -19,34 +24,25 @@ class KubernetesCli < Formula
   uses_from_macos "rsync" => :build
 
   def install
-    ENV["GOPATH"] = buildpath
-    dir = buildpath/"src/k8s.io/kubernetes"
-    dir.install buildpath.children - [buildpath/".brew_home"]
+    # Don't dirty the git tree
+    rm_rf ".brew_home"
 
-    cd dir do
-      # Race condition still exists in OS X Yosemite
-      # Filed issue: https://github.com/kubernetes/kubernetes/issues/34635
-      ENV.deparallelize { system "make", "generated_files" }
+    # Make binary
+    system "make", "WHAT=cmd/kubectl"
+    bin.install "_output/bin/kubectl"
 
-      # Make binary
-      system "make", "kubectl"
-      bin.install "_output/local/bin/darwin/amd64/kubectl"
+    # Install bash completion
+    output = Utils.safe_popen_read("#{bin}/kubectl", "completion", "bash")
+    (bash_completion/"kubectl").write output
 
-      # Install bash completion
-      output = Utils.safe_popen_read("#{bin}/kubectl", "completion", "bash")
-      (bash_completion/"kubectl").write output
+    # Install zsh completion
+    output = Utils.safe_popen_read("#{bin}/kubectl", "completion", "zsh")
+    (zsh_completion/"_kubectl").write output
 
-      # Install zsh completion
-      output = Utils.safe_popen_read("#{bin}/kubectl", "completion", "zsh")
-      (zsh_completion/"_kubectl").write output
-
-      prefix.install_metafiles
-
-      # Install man pages
-      # Leave this step for the end as this dirties the git tree
-      system "hack/generate-docs.sh"
-      man1.install Dir["docs/man/man1/*.1"]
-    end
+    # Install man pages
+    # Leave this step for the end as this dirties the git tree
+    system "hack/generate-docs.sh"
+    man1.install Dir["docs/man/man1/*.1"]
   end
 
   test do

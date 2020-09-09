@@ -1,16 +1,16 @@
 class GitDelta < Formula
   desc "Syntax-highlighting pager for git and diff output"
   homepage "https://github.com/dandavison/delta"
-  url "https://github.com/dandavison/delta/archive/0.3.0.tar.gz"
-  sha256 "4ff8d5864306f130be8e0da3d8013bcc4ece082835d4cc5395775c669111ed77"
+  url "https://github.com/dandavison/delta/archive/0.4.3.tar.gz"
+  sha256 "78ee36ec30194fe261ccb585111b67adae5166e79170f9636e54cbf5427da54a"
   license "MIT"
   head "https://github.com/dandavison/delta.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "21a53f197f28899fd2649ed9f685526eb6a4a9fe13819fdc3fa543d5858e04be" => :catalina
-    sha256 "db7c9389bf569314917cc0d0e979baf034955fdc90ab77dd4faafb934a71dfca" => :mojave
-    sha256 "7aec3f7a0ccd5ce2f7bcd753ba6539fe2b8489e53b6b372a1a7802df036fb47d" => :high_sierra
+    sha256 "ef07bc394646ce496f4df2187a190d9462911309484859eb673a898afe5cd245" => :catalina
+    sha256 "766eb46b081280cb6db0e7a18b0af23061de6bc36a17424b9389d044b9f395a9" => :mojave
+    sha256 "a21ba72f6937355d553b634caf3498edcd87c3329e134d1ceeaddb6490ba27ea" => :high_sierra
   end
 
   depends_on "rust" => :build

@@ -2,17 +2,21 @@ class ArduinoCli < Formula
   desc "Arduino command-line interface"
   homepage "https://github.com/arduino/arduino-cli"
   url "https://github.com/arduino/arduino-cli.git",
-     tag:      "0.11.0",
-     revision: "0296f4df116385f868b67c5ffa7393936c3345c9"
+     tag:      "0.12.1",
+     revision: "48383dad5e53f155beff1178742ed5e2ea810c5f"
   license "GPL-3.0"
-  revision 2
   head "https://github.com/arduino/arduino-cli.git"
+
+  livecheck do
+    url :head
+    regex(/^v?(\d+(?:\.\d+)+)$/i)
+  end
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "7d6e6a081632c6cb89e60636c3a7e6989375d10f8ab0f350927f68ea8957ed42" => :catalina
-    sha256 "878390cd1048b3370de84200bf37e718b37252ae9daa437cac543635ba3bf482" => :mojave
-    sha256 "b84292063439746cbaf314a60172e94659f90a6b80eaaab8f138b2ec4c128c43" => :high_sierra
+    sha256 "cee001376951036fc6dba3ca7d5988846074a57d8992c3e600485d8c69d13d48" => :catalina
+    sha256 "52278e7dd0a3522c6f21a60694f61c60b0a65ba190ca1c7fcf91666d38cef8f5" => :mojave
+    sha256 "ee42928545a41658b9ba6d0fc01c936121cd0fd58c0bfa3b510daad2c5a47d9b" => :high_sierra
   end
 
   depends_on "go" => :build

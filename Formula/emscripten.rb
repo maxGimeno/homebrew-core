@@ -8,36 +8,42 @@ class Emscripten < Formula
   license "MIT"
 
   stable do
-    url "https://github.com/emscripten-core/emscripten/archive/1.39.20.tar.gz"
-    sha256 "379138716c8b8858a13f9bd993e51f8ef20c182a9fa3320072d783da5bf5f80c"
+    url "https://github.com/emscripten-core/emscripten/archive/1.40.1.tar.gz"
+    sha256 "e15ad7ffa1cce35c25cac7c797d6daa0c5868905eaaf5ed1431a8228b8803dfc"
 
     resource "fastcomp" do
-      url "https://github.com/emscripten-core/emscripten-fastcomp/archive/1.39.20.tar.gz"
-      sha256 "ded36b5fbac863a48c15161157ef4481ea767b43cf2d6791f502223f016e96eb"
+      url "https://github.com/emscripten-core/emscripten-fastcomp/archive/1.40.1.tar.gz"
+      sha256 "c34868ab566e9f073df319d9872608cef47ed1ea74852acacb12a22fd7c99a4c"
     end
 
     resource "fastcomp-clang" do
-      url "https://github.com/emscripten-core/emscripten-fastcomp-clang/archive/1.39.20.tar.gz"
-      sha256 "26a07d8b5e7ec6cbfd77cdee3d8fc8a644d0166244a0beb68e104fd7dd8d1ede"
+      url "https://github.com/emscripten-core/emscripten-fastcomp-clang/archive/1.40.1.tar.gz"
+      sha256 "9ce4612df39684348d78acb711ec10bee98ad4ac136fb0dcb70d4c884b8bb6b3"
     end
+  end
+
+  livecheck do
+    url :head
+    regex(/^v?(\d+(?:\.\d+)+)$/i)
   end
 
   bottle do
     cellar :any
-    sha256 "1c4d040a8bf64d3c8ba9694e63508c1a01c44d83bbae37d7fd8a166cd1638a68" => :catalina
-    sha256 "3e8c66def035c7e7eea99d11f0c37ae6b18c1c88fe5ce070bc7660762f2e6727" => :mojave
-    sha256 "5932fbf012e72a11c25ffac6d9850fb20b12a266bee96f3f54bff2be5554d96f" => :high_sierra
+    rebuild 1
+    sha256 "8b21f38d1065a89301c3cce79c0bce448089d536280ae6d1cbe97ee3a98b183d" => :catalina
+    sha256 "476a8b8a00f535d160cbb8a08f82c5256d46a434703ecd86d2ed10ec5cea36fe" => :mojave
+    sha256 "09ad53bb82328357f106bbb01b06caa9a02c3daedc9d3ea4f7419badbaa66e17" => :high_sierra
   end
 
   head do
-    url "https://github.com/emscripten-core/emscripten.git", branch: "incoming"
+    url "https://github.com/emscripten-core/emscripten.git"
 
     resource "fastcomp" do
-      url "https://github.com/emscripten-core/emscripten-fastcomp.git", branch: "incoming"
+      url "https://github.com/emscripten-core/emscripten-fastcomp.git"
     end
 
     resource "fastcomp-clang" do
-      url "https://github.com/emscripten-core/emscripten-fastcomp-clang.git", branch: "incoming"
+      url "https://github.com/emscripten-core/emscripten-fastcomp-clang.git"
     end
   end
 
@@ -87,18 +93,28 @@ class Emscripten < Formula
     end
   end
 
-  def caveats
-    <<~EOS
-      Manually set LLVM_ROOT to
-        #{opt_libexec}/llvm/bin
-      and BINARYEN_ROOT to
-        #{Formula["binaryen"].opt_prefix}
-      in ~/.emscripten after running `emcc` for the first time.
-    EOS
+  def post_install
+    system bin/"emcc"
+    inreplace "#{libexec}/.emscripten" do |s|
+      s.gsub! /^(LLVM_ROOT.*)/, "#\\1\nLLVM_ROOT = \"#{opt_libexec}/llvm/bin\"\\2"
+      s.gsub! /^(BINARYEN_ROOT.*)/, "#\\1\nBINARYEN_ROOT = \"#{Formula["binaryen"].opt_prefix}\"\\2"
+    end
   end
 
   test do
-    system bin/"emcc"
-    assert_predicate testpath/".emscripten", :exist?, "Failed to create sample config"
+    # Fixes "Unsupported architecture" Xcode prepocessor error
+    ENV.delete "CPATH"
+
+    (testpath/"test.c").write <<~EOS
+      #include <stdio.h>
+      int main()
+      {
+        printf("Hello World!");
+        return 0;
+      }
+    EOS
+
+    system bin/"emcc", "test.c", "-o", "test.js", "-s", "NO_EXIT_RUNTIME=0"
+    assert_equal "Hello World!", shell_output("node test.js").chomp
   end
 end

@@ -2,15 +2,15 @@ class Argocd < Formula
   desc "GitOps Continuous Delivery for Kubernetes"
   homepage "https://argoproj.io"
   url "https://github.com/argoproj/argo-cd.git",
-      tag:      "v1.6.1",
-      revision: "159674ee844a378fb98fe297006bf7b83a6e32d2"
+      tag:      "v1.7.4",
+      revision: "f8cbd6bf432327cc3b0f70d23b66511bb906a178"
   license "Apache-2.0"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "c988b2c0db76ae062803b59bd258fe8617700d942802db2e541a19686e46b6e8" => :catalina
-    sha256 "9f02374c7445563bb5212f05e4341e6700a5c392f10bc4a763cdae4d2308b736" => :mojave
-    sha256 "091dd790ed68a02fca4a2b36aa1df68840e190b7ff6f58bc13a732bf584b68f3" => :high_sierra
+    sha256 "d46322d53c5c2be38a381f5b882eaac63c8821cadc2e51b382e691ffee143097" => :catalina
+    sha256 "b2c34e1587f02b4d02899d4795f504f1f99921c3969bcfeacc47674e9ad0ab83" => :mojave
+    sha256 "675dfa8e17e3e7f3e42d96de0e3638ad95ec3c221115f73428ccd04dde5d1266" => :high_sierra
   end
 
   depends_on "go" => :build
@@ -18,8 +18,13 @@ class Argocd < Formula
   def install
     # this needs to be remove to prevent multiple 'operation not permitted' errors
     inreplace "Makefile", "CGO_ENABLED=0", ""
-    system "make", "cli"
+    system "make", "cli-local"
     bin.install "dist/argocd"
+
+    output = Utils.safe_popen_read("#{bin}/argocd", "completion", "bash")
+    (bash_completion/"argocd").write output
+    output = Utils.safe_popen_read("#{bin}/argocd", "completion", "zsh")
+    (zsh_completion/"_argocd").write output
   end
 
   test do

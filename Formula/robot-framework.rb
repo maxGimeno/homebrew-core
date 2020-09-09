@@ -5,7 +5,13 @@ class RobotFramework < Formula
   homepage "https://robotframework.org/"
   url "https://github.com/robotframework/robotframework/archive/v3.2.1.tar.gz"
   sha256 "9805faa0990125ff2c9689b673448d5f47e78470e7a8e95af1606a775fa8379f"
+  license "Apache-2.0"
   head "https://github.com/robotframework/robotframework.git"
+
+  livecheck do
+    url :head
+    regex(/^v?(\d+(?:\.\d+)+)$/i)
+  end
 
   bottle do
     cellar :any

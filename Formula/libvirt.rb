@@ -1,59 +1,52 @@
 class Libvirt < Formula
   desc "C virtualization API"
   homepage "https://www.libvirt.org"
-  url "https://libvirt.org/sources/libvirt-6.5.0.tar.xz"
-  sha256 "4915d9eab299ed79288d7598b717c587156708c05f701fe55a72293f32eb3182"
-  license "LGPL-2.1"
-  head "https://github.com/libvirt/libvirt.git"
+  url "https://libvirt.org/sources/libvirt-6.7.0.tar.xz"
+  sha256 "655b9476c797cdd3bb12e2520acc37335e5299b2d56a5bb9ab3f55db40161342"
+  license all_of: ["LGPL-2.1-or-later", "GPL-2.0-or-later"]
 
-  bottle do
-    sha256 "df81313d97bb0d43ce9b01988b3f0fd2369bcd8461bbd149114c3b33cad443ef" => :catalina
-    sha256 "2a4e264b22ba97272751649d3b8bade2d384d10414b66e998d33427f40a89a2c" => :mojave
-    sha256 "9edb82e3ac08e1df44333f95b0bf98e59392358b2b686d9c2d7f4301b357992a" => :high_sierra
+  livecheck do
+    url "https://libvirt.org/sources/"
+    regex(/href=.*?libvirt[._-]v?([\d.]+)\.t/i)
   end
 
+  bottle do
+    sha256 "4663b7bd349c9ef7ca8893a4e8b39032f0778957d2a4c452a85d875c51480b27" => :catalina
+    sha256 "4bbf546eed48b2d066e94c4a7b43c6ca12abb35748e33308a72f8d461a08f106" => :mojave
+    sha256 "12288e6ed862ab0d0424cac465ef705a82b7ed103f33412ee3d3c86a7966639b" => :high_sierra
+  end
+
+  head do
+    url "https://github.com/libvirt/libvirt.git"
+  end
   depends_on "docutils" => :build
+  depends_on "meson" => :build
+  depends_on "ninja" => :build
+  depends_on "perl" => :build
   depends_on "pkg-config" => :build
+  depends_on "python@3.8" => :build
+  depends_on "rpcgen" => :build
+  depends_on "gettext"
   depends_on "glib"
   depends_on "gnutls"
   depends_on "libgcrypt"
+  depends_on "libiscsi"
+  depends_on "libssh2"
   depends_on "yajl"
 
-  if build.head?
-    depends_on "autoconf" => :build
-    depends_on "automake" => :build
-    depends_on "gettext" => :build
-    depends_on "libtool" => :build
-    depends_on "rpcgen" => :build
-  end
-
   def install
-    args = %W[
-      --prefix=#{prefix}
-      --localstatedir=#{var}
-      --mandir=#{man}
-      --sysconfdir=#{etc}
-      --with-esx
-      --with-init-script=none
-      --with-remote
-      --with-test
-      --with-vbox
-      --with-vmware
-      --with-qemu
-    ]
-
-    args << "ac_cv_path_RPCGEN=#{Formula["rpcgen"].opt_prefix}/bin/rpcgen" if build.head?
-
-    # Work around a gnulib issue with macOS Catalina
-    args << "gl_cv_func_ftello_works=yes"
-
     mkdir "build" do
-      system "../autogen.sh" if build.head?
-      system "../configure", *args
-
-      # Compilation of docs doesn't get done if we jump straight to "make install"
-      system "make"
-      system "make", "install"
+      args = %W[
+        --localstatedir=#{var}
+        --mandir=#{man}
+        --sysconfdir=#{etc}
+        -Ddriver_esx=enabled
+        -Ddriver_qemu=enabled
+        -Dinit_script=none
+      ]
+      system "meson", *std_meson_args, *args, ".."
+      system "meson", "compile"
+      system "meson", "install"
     end
   end
 

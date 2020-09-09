@@ -1,15 +1,16 @@
 class Skylighting < Formula
   desc "Flexible syntax highlighter using KDE XML syntax descriptions"
   homepage "https://github.com/jgm/skylighting"
-  url "https://github.com/jgm/skylighting/archive/0.8.5.tar.gz"
-  sha256 "c77298809f7301b23bf2e8d479fde6be493bec42c36efce87ef37ac3bc27f112"
+  url "https://github.com/jgm/skylighting/archive/0.10.tar.gz"
+  sha256 "2836436fbd9fee40d32da03f47c1a0793c18b595f1d3d7541b87a3c5e008f4ef"
+  license "GPL-2.0-or-later"
   head "https://github.com/jgm/skylighting.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "ad47fed610330a0acdb8c452bae67188e7d6fe7c480bf77d009134767cdda8d2" => :catalina
-    sha256 "5e42120c8f8a483d79f874f34d75173b94589bf202d694551af4ab3579f31524" => :mojave
-    sha256 "d2d99c49b0aaea3c3d4cbfc672bb2ea9de65336b6eb696f59e6edc03cb962184" => :high_sierra
+    sha256 "d8286e363a23afb3e7d6d83a6a2d5d2b8e40dcd85290b760a5cdae2739029af5" => :catalina
+    sha256 "9c2934efd3e92e64012d2c08a13b94fde8a9018f210cca789eb020c36fb3cff9" => :mojave
+    sha256 "75da6b19ddc24ccaa6a34b9c7e2b877621187358e7b0bce399fc8050691afa3b" => :high_sierra
   end
 
   depends_on "cabal-install" => :build
@@ -89,13 +90,13 @@ class Skylighting < Formula
       \\newcommand{\\VerbatimStringTok}[1]{\\textcolor[rgb]{0.75,0.01,0.01}{\#1}}
       \\newcommand{\\WarningTok}[1]{\\textcolor[rgb]{0.75,0.01,0.01}{\#1}}
       \\title{#{testpath/"Test.java"}}
-      
+
       \\begin{document}
       \\maketitle
       \\begin{Shaded}
       \\begin{Highlighting}[]
       \\KeywordTok{import}\\ImportTok{ java.util.*;}
-      
+
       \\KeywordTok{public} \\KeywordTok{class}\\NormalTok{ Test \\{}
           \\KeywordTok{public} \\DataTypeTok{static} \\DataTypeTok{void} \\FunctionTok{main}\\NormalTok{(}\\BuiltInTok{String}\\NormalTok{[] args) }\\KeywordTok{throws} \\BuiltInTok{Exception}\\NormalTok{ \\{}
               \\DataTypeTok{final} \\BuiltInTok{ArrayDeque}\\NormalTok{\\textless{}}\\BuiltInTok{String}\\NormalTok{\\textgreater{} argDeque = }\\KeywordTok{new} \\BuiltInTok{ArrayDeque}\\NormalTok{\\textless{}\\textgreater{}(}\\BuiltInTok{Arrays}\\NormalTok{.}\\FunctionTok{asList}\\NormalTok{(args));}
@@ -108,7 +109,7 @@ class Skylighting < Formula
       \\NormalTok{\\}}
       \\end{Highlighting}
       \\end{Shaded}
-      
+
       \\end{document}
     EOF
     actual_out = shell_output("#{bin/"skylighting"} -f latex #{testpath/"Test.java"}")

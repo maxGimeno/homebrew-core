@@ -1,15 +1,15 @@
 class Helmfile < Formula
   desc "Deploy Kubernetes Helm Charts"
   homepage "https://github.com/roboll/helmfile"
-  url "https://github.com/roboll/helmfile/archive/v0.125.0.tar.gz"
-  sha256 "14ff7dd0004d19318e88d407af8d11da5f8d73755171473250a23fce9cd93e6a"
+  url "https://github.com/roboll/helmfile/archive/v0.128.0.tar.gz"
+  sha256 "22358eaaa494f9720cc65f9acefd62d741f0b46267533d837be4fd683805a971"
   license "MIT"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "20309cae42e4f7326527539b9803a8ebad2076efb70ff93a8543d343a2c8f1cf" => :catalina
-    sha256 "82e544dcc1fe76f1b439a4156307fe4b37614e2051aab4f6ff7f44f78df4ad9a" => :mojave
-    sha256 "e93efc43348b5554f653b6dfe41ff854be5cba5959ef9a09407c4c0fe0fe8fd8" => :high_sierra
+    sha256 "e7b7144e297d12f7b4bedcf591c93509499cd68791629e67db38b26863d0dbdb" => :catalina
+    sha256 "1c49fdda3e41cf02790eddb762dd3fcfa6c99a5d0bfd1cfcffa218f24f4690a1" => :mojave
+    sha256 "64e70e8412b6ae3d581829ec155e4e3dd8c1335c299b37f172a58ae5d8bcdb25" => :high_sierra
   end
 
   depends_on "go" => :build
@@ -24,14 +24,15 @@ class Helmfile < Formula
     (testpath/"helmfile.yaml").write <<-EOS
     repositories:
     - name: stable
-      url: https://kubernetes-charts.storage.googleapis.com/
+      url: https://kubernetes-charts.storage.googleapis.com
 
     releases:
     - name: vault                            # name of this release
       namespace: vault                       # target namespace
+      createNamespace: true                  # helm 3.2+ automatically create release namespace (default true)
       labels:                                # Arbitrary key value pairs for filtering releases
         foo: bar
-      chart: roboll/vault-secret-manager     # the chart being installed to create this release, referenced by `repository/chart` syntax
+      chart: stable/vault                    # the chart being installed to create this release, referenced by `repository/chart` syntax
       version: ~1.24.1                       # the semver of the chart. range constraint is supported
     EOS
     system Formula["helm"].opt_bin/"helm", "create", "foo"

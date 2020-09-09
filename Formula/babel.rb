@@ -4,21 +4,25 @@ require "json"
 class Babel < Formula
   desc "Compiler for writing next generation JavaScript"
   homepage "https://babeljs.io/"
-  url "https://registry.npmjs.org/@babel/core/-/core-7.10.5.tgz"
-  sha256 "7ad420ecd76539744759c60c5e118abd7b103eb19631163f1879b4a00217b05e"
+  url "https://registry.npmjs.org/@babel/core/-/core-7.11.6.tgz"
+  sha256 "4ce5e610252196c5c8f406e04510edf946bfa4d18b0454bd3b118a73fc6a01fc"
   license "MIT"
 
+  livecheck do
+    url :stable
+  end
+
   bottle do
-    sha256 "97994b3ae974782537a2a0127526230470c340f88eb79115142258ca895e5336" => :catalina
-    sha256 "a5b87e906beea6580a65befdd61a927bfa152bbf47698d516c211d1a8be34691" => :mojave
-    sha256 "663c420051ebf322932f7c82af7b5bd7fc6269cf9eefed6b14ab5966eeff4f6c" => :high_sierra
+    sha256 "57ef34b67255a4b551a96db8cf39edf7a41de72c8672af87334e1a6591b26de4" => :catalina
+    sha256 "c6bb760bd560268e77b847acfeab100d84b105c7bf356b178ea5a9204b325b98" => :mojave
+    sha256 "1730a4b800e14842c4756c5cbd97270a8d82f552fc13575d4de1cde674d509c2" => :high_sierra
   end
 
   depends_on "node"
 
   resource "babel-cli" do
-    url "https://registry.npmjs.org/@babel/cli/-/cli-7.10.5.tgz"
-    sha256 "cebcdfc983c5dd3c3535bd6a0ea1f2f550cb3339d76284114d51c5b3cd80d5ce"
+    url "https://registry.npmjs.org/@babel/cli/-/cli-7.11.5.tgz"
+    sha256 "753dac0c168274369d18cb7c2d90326173aa15639aa843d81b29ca2ac64926e5"
   end
 
   def install

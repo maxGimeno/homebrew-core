@@ -8,6 +8,10 @@ class Ooniprobe < Formula
   license "BSD-2-Clause"
   revision 3
 
+  livecheck do
+    url :stable
+  end
+
   bottle do
     cellar :any
     sha256 "9a5d8c8b6bda3609642113631ba7c39b2cbf4fc27b09bd4b2fccc832befdd3e5" => :catalina
@@ -17,7 +21,7 @@ class Ooniprobe < Formula
 
   # Unmaintained. Last PyPI release on 2018-02-18
   # Use https://github.com/ooni/probe-cli instead
-  deprecate! date: "2018-02-18"
+  deprecate! date: "2018-02-18", because: :unsupported
 
   depends_on "geoip"
   depends_on "libdnet"

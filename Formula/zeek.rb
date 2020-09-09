@@ -2,14 +2,14 @@ class Zeek < Formula
   desc "Network security monitor"
   homepage "https://www.zeek.org"
   url "https://github.com/zeek/zeek.git",
-      tag:      "v3.1.4",
-      revision: "6747d93745a00d24a376d4633280a47a60961e10"
+      tag:      "v3.2.0",
+      revision: "8e79c8dcd14b185726c5f7be9d31bb8e93686d46"
+  license "BSD-3-Clause"
   head "https://github.com/zeek/zeek.git"
 
   bottle do
-    sha256 "8a3b5c9927ba7bf5ed5b092125dd171c89f53980bb7f95486fbcec47310bbc0d" => :catalina
-    sha256 "3010d37df0093d43d2c069ea88a36c874a21bb92bc280bdb771c49a9940701bf" => :mojave
-    sha256 "8c0a404464b81149411480bb3fd99127080545239c6a2a8758b822e244f2c0bc" => :high_sierra
+    sha256 "56cab87a741d4c883f5f4fcb024c38012137e11e2c1ba32ec17cb99077f22b89" => :catalina
+    sha256 "8b10362d4d4f3641f5af1a0dc2839501d3c2302fc619de2af1af067e0225ee88" => :mojave
   end
 
   depends_on "bison" => :build
@@ -17,7 +17,7 @@ class Zeek < Formula
   depends_on "swig" => :build
   depends_on "caf"
   depends_on "geoip"
-  depends_on :macos # Due to Python 2 (https://github.com/zeek/zeek/issues/706)
+  depends_on macos: :mojave
   depends_on "openssl@1.1"
 
   uses_from_macos "flex"

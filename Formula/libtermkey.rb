@@ -5,6 +5,11 @@ class Libtermkey < Formula
   sha256 "6945bd3c4aaa83da83d80a045c5563da4edd7d0374c62c0d35aec09eb3014600"
   license "MIT"
 
+  livecheck do
+    url :homepage
+    regex(/href=.*?libtermkey[._-]v?(\d+(?:\.\d+)+)\.t/i)
+  end
+
   bottle do
     cellar :any
     sha256 "293f71f6cb8498f734910ada7ffe4e8e2ea2cb6121455318053d2a5951b272a8" => :catalina
@@ -18,6 +23,10 @@ class Libtermkey < Formula
   depends_on "unibilium"
 
   uses_from_macos "ncurses"
+
+  on_linux do
+    depends_on "glib" => :build
+  end
 
   def install
     system "make", "PREFIX=#{prefix}"

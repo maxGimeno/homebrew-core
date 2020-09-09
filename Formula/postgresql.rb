@@ -1,16 +1,20 @@
 class Postgresql < Formula
   desc "Object-relational database system"
   homepage "https://www.postgresql.org/"
-  url "https://ftp.postgresql.org/pub/source/v12.3/postgresql-12.3.tar.bz2"
-  sha256 "94ed64a6179048190695c86ec707cc25d016056ce10fc9d229267d9a8f1dcf41"
+  url "https://ftp.postgresql.org/pub/source/v12.4/postgresql-12.4.tar.bz2"
+  sha256 "bee93fbe2c32f59419cb162bcc0145c58da9a8644ee154a30b9a5ce47de606cc"
   license "PostgreSQL"
-  revision 4
   head "https://github.com/postgres/postgres.git"
 
+  livecheck do
+    url "https://www.postgresql.org/docs/current/static/release.html"
+    regex(/Release v?(\d+(?:\.\d+)+)/i)
+  end
+
   bottle do
-    sha256 "069912aa3d10ecb548eb2dddd7e3e1be61d1689d236b5993bce3e1a31811bcd0" => :catalina
-    sha256 "06eb65f3f17b6bf08344cbae35adc295f5c6da22420ee81d1e8fe2787e05a03b" => :mojave
-    sha256 "93e3b484a26931374ece4ee4f5abd4b3eac0a6e519d2fba696871f2342f0e513" => :high_sierra
+    sha256 "cf7e64a4a702db6667582d6a8d83107b67d1457a623fbe04426d9702023612fa" => :catalina
+    sha256 "199d0fa0c97e376933c8cca82e44503b36f610f7edb2170e6a1e7e7491c82017" => :mojave
+    sha256 "c210ec1143b73616108891c3cefaa31754c5bd5fda0222e2e3266035488a1353" => :high_sierra
   end
 
   depends_on "pkg-config" => :build
@@ -86,6 +90,11 @@ class Postgresql < Formula
     <<~EOS
       To migrate existing data from a previous major version of PostgreSQL run:
         brew postgresql-upgrade-database
+
+      This formula has created a default database cluster with:
+        initdb --locale=C -E UTF-8 #{var}/postgres
+      For more details, read:
+        https://www.postgresql.org/docs/#{version.major}/app-initdb.html
     EOS
   end
 

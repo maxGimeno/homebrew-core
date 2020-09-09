@@ -2,8 +2,8 @@ class Filebeat < Formula
   desc "File harvester to ship log files to Elasticsearch or Logstash"
   homepage "https://www.elastic.co/products/beats/filebeat"
   url "https://github.com/elastic/beats.git",
-      tag:      "v7.8.0",
-      revision: "f79387d32717d79f689d94fda1ec80b2cf285d30"
+      tag:      "v7.9.1",
+      revision: "ad823eca4cc74439d1a44351c596c12ab51054f5"
   # Outside of the "x-pack" folder, source code in a given file is licensed
   # under the Apache License Version 2.0
   license "Apache-2.0"
@@ -11,9 +11,9 @@ class Filebeat < Formula
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "5235b8f234400aaceb43e59792f9712001246f4680659a0d9842415a0cdfd6e2" => :catalina
-    sha256 "e05e913f45fa9e4815ca5bb4ae7e61175dbf28ec521dc95f1f287ac022a22f16" => :mojave
-    sha256 "a60293f9c34d58e05f5be00b223c40eeba80b93582575f4c7d6594b4653c25ba" => :high_sierra
+    sha256 "fbdfc01c817b6479da2413335bfe2fca0a7a1f0fc175c2aeed492532364cf9a5" => :catalina
+    sha256 "ba5eaa6b5afe98f8aceab2147c1f96f2e6b239d989542c8ccb7f8c76b5d01e6d" => :mojave
+    sha256 "3cf64748c2ec4df81644ad0863fc9213610567ad2645a0fdd6d24b2b9981c12e" => :high_sierra
   end
 
   depends_on "go" => :build
@@ -24,6 +24,13 @@ class Filebeat < Formula
   resource "virtualenv" do
     url "https://files.pythonhosted.org/packages/b1/72/2d70c5a1de409ceb3a27ff2ec007ecdd5cc52239e7c74990e32af57affe9/virtualenv-15.2.0.tar.gz"
     sha256 "1d7e241b431e7afce47e77f8843a276f652699d1fa4f93b9d8ce0076fd7b0b54"
+  end
+
+  # Update MarkupSafe to 1.1.1, remove with next release
+  # https://github.com/elastic/beats/pull/20105
+  patch do
+    url "https://github.com/elastic/beats/commit/5a6ca609259956ff5dd8e4ec80b73e6c96ff54b2.patch?full_index=1"
+    sha256 "b362f8921611297a0879110efcb88a04cf660d120ad81cd078356d502ba4c2ce"
   end
 
   def install
@@ -51,7 +58,7 @@ class Filebeat < Formula
 
       system "make", "mage"
       # prevent downloading binary wheels during python setup
-      system "make", "PIP_INSTALL_COMMANDS=--no-binary :all", "python-env"
+      system "make", "PIP_INSTALL_PARAMS=--no-binary :all", "python-env"
       system "mage", "-v", "build"
       system "mage", "-v", "update"
 

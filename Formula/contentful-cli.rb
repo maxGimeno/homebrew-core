@@ -3,16 +3,20 @@ require "language/node"
 class ContentfulCli < Formula
   desc "Contentful command-line tools"
   homepage "https://github.com/contentful/contentful-cli"
-  url "https://registry.npmjs.org/contentful-cli/-/contentful-cli-1.4.17.tgz"
-  sha256 "d1a38c3f4ce6d5c5eecc02c22ec60c3de0e3f122d9a1cc1ccc070c2cedbf9e2b"
+  url "https://registry.npmjs.org/contentful-cli/-/contentful-cli-1.4.30.tgz"
+  sha256 "f6d1ae178f74b302b603263b59adec0056f681a40ef5a7df663e9884170e9e2a"
   license "MIT"
   head "https://github.com/contentful/contentful-cli.git"
 
+  livecheck do
+    url :stable
+  end
+
   bottle do
     cellar :any_skip_relocation
-    sha256 "ee999dffb7af4fad17a347edf0fc62f9a656ae50f47c696da3f0f5a55bddd65c" => :catalina
-    sha256 "ab4a672a796b111fdbb118c51a9fa9503f31bd9d34309ca29d7a223dc508011d" => :mojave
-    sha256 "104bb38a1761914b3c4648fc8e65d97fccda587bcb2b646aa383a7684f2d0f2d" => :high_sierra
+    sha256 "b7c12c1b74ecad2bd75501159beb7a9ba779b420b3a233aacd90e6d5b3979292" => :catalina
+    sha256 "47d5744c91b803e68cfec5e1c292d6fa500b63e0f378b4948ae0533224ac3225" => :mojave
+    sha256 "d468608c0ad07e5415df1bea226f6f987d8620ec139e2d9ad740cb1c4cc6f6c6" => :high_sierra
   end
 
   depends_on "node"

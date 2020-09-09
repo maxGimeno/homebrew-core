@@ -1,15 +1,19 @@
 class PostgresqlAT96 < Formula
   desc "Object-relational database system"
   homepage "https://www.postgresql.org/"
-  url "https://ftp.postgresql.org/pub/source/v9.6.18/postgresql-9.6.18.tar.bz2"
-  sha256 "517ec282b785e6d22f360c30ba0c5e2a506fca5ca07dcc545427511d94c89999"
+  url "https://ftp.postgresql.org/pub/source/v9.6.19/postgresql-9.6.19.tar.bz2"
+  sha256 "61f93a94ccddbe0b2d1afaf03f04ba605d8af5b774ff9b830e5adeb50ab55cb0"
   license "PostgreSQL"
-  revision 2
+
+  livecheck do
+    url "https://www.postgresql.org/docs/9.6/static/release.html"
+    regex(/Release v?(\d+(?:\.\d+)+)/i)
+  end
 
   bottle do
-    sha256 "bb2dcc5e902d8a008ee4910b649859c9a1c36c379984fd154993f815845456b3" => :catalina
-    sha256 "1f8222b21e01eb165b53c1a1cfdfbef3fdb669078ec4104294d4816da5ab5fda" => :mojave
-    sha256 "10253285381fec67b3329251271a72e7d6011b6f622ad645b85b39a74a800ab8" => :high_sierra
+    sha256 "81b3a3ac4e549641e48fe4f291b32266603858cff2ceb6242f2725deb20bdd9a" => :catalina
+    sha256 "b515085fd803628a5979a34402fa7296e95c437bc5805ec08acd69b43ac11c6a" => :mojave
+    sha256 "59593120c3bce07fa0c130eda3f1b0aef1cc2ed254b822fd9ed416d7469a8da2" => :high_sierra
   end
 
   keg_only :versioned_formula
@@ -99,6 +103,11 @@ class PostgresqlAT96 < Formula
 
         You will need your previous PostgreSQL installation from brew to perform `pg_upgrade`.
           Do not run `brew cleanup postgresql@9.6` until you have performed the migration.
+
+      This formula has created a default database cluster with:
+        initdb #{var}/postgres
+      For more details, read:
+        https://www.postgresql.org/docs/#{version.major}/app-initdb.html
     EOS
   end
 

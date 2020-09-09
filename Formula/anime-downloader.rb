@@ -3,16 +3,20 @@ class AnimeDownloader < Formula
 
   desc "Download your favourite anime"
   homepage "https://github.com/vn-ki/anime-downloader"
-  url "https://files.pythonhosted.org/packages/cc/a0/0ea48a8314129d31c2a83bcc4bc3d0f2c2ff3c341274653a93f111267660/anime-downloader-4.4.0.tar.gz"
-  sha256 "425330555e1ce7a0dde68b593d3dd5260de002b806da82cebc81661153a5ba16"
+  url "https://files.pythonhosted.org/packages/c2/65/55ff3c5c26f0e9af726301d2581d8972b70bc209560881ba8596ff00a36e/anime-downloader-4.6.4.tar.gz"
+  sha256 "62d3aab32b02bbb5e7025db630da1e3ee2a91c7d88bfae6b44f1f26e0c9b8533"
   license "Unlicense"
   head "https://github.com/vn-ki/anime-downloader.git"
 
+  livecheck do
+    url :stable
+  end
+
   bottle do
     cellar :any_skip_relocation
-    sha256 "da78add44d1eb3a5efef384cca7a445e55a21f48c44888bf662fe54e9fdfe0cb" => :catalina
-    sha256 "2ed701f5f4536dc48a09e2257c9074743b192837ca06a938c67fcea595b9853a" => :mojave
-    sha256 "a94d2b8b9e149cab0bb0bc2267c052c44a293eb2b5f8a499af3e142129476516" => :high_sierra
+    sha256 "3d0a8dab67b7a28863aae65b35e96eff23981192735785cc5577281e19b87716" => :catalina
+    sha256 "7182d5190eaa861f4f69789680c2b235ca7eb1b394e2631810c3a2c5154bf4a1" => :mojave
+    sha256 "22090d8217a5e7611f91ac1e84fa38ad4fa2b099d2382ba216dd6eaa3aca2f05" => :high_sierra
   end
 
   depends_on "aria2"
@@ -90,8 +94,8 @@ class AnimeDownloader < Formula
   end
 
   resource "urllib3" do
-    url "https://files.pythonhosted.org/packages/05/8c/40cd6949373e23081b3ea20d5594ae523e681b6f472e600fbc95ed046a36/urllib3-1.25.9.tar.gz"
-    sha256 "3018294ebefce6572a474f0604c2021e33b3fd8006ecd11d62107a5d2a963527"
+    url "https://files.pythonhosted.org/packages/81/f4/87467aeb3afc4a6056e1fe86626d259ab97e1213b1dfec14c7cb5f538bf0/urllib3-1.25.10.tar.gz"
+    sha256 "91056c15fa70756691db97756772bb1eb9678fa585d9184f24534b100dc60f4a"
   end
 
   def install
@@ -99,8 +103,8 @@ class AnimeDownloader < Formula
   end
 
   test do
-    assert_match "anime, version #{version}", shell_output("#{bin}/anime --version")
+    assert_match "Download or watch your favourite anime", shell_output("#{bin}/anime --help 2>&1")
 
-    assert_match "Watch is deprecated in favour of adl", shell_output("#{bin}/anime watch 2>&1")
+    assert_equal "anime, version #{version}", shell_output("#{bin}/anime --version").chomp
   end
 end

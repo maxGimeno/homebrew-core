@@ -4,21 +4,26 @@ class Go < Formula
   license "BSD-3-Clause"
 
   stable do
-    url "https://dl.google.com/go/go1.14.5.src.tar.gz"
-    mirror "https://fossies.org/linux/misc/go1.14.5.src.tar.gz"
-    sha256 "ca4c080c90735e56152ac52cd77ae57fe573d1debb1a58e03da9cc362440315c"
+    url "https://golang.org/dl/go1.15.1.src.tar.gz"
+    mirror "https://fossies.org/linux/misc/go1.15.1.src.tar.gz"
+    sha256 "d3743752a421881b5cc007c76b4b68becc3ad053e61275567edab1c99e154d30"
 
-    go_version = version.to_s.split(".")[0..1].join(".")
+    go_version = version.major_minor
     resource "gotools" do
       url "https://go.googlesource.com/tools.git",
           branch: "release-branch.go#{go_version}"
     end
   end
 
+  livecheck do
+    url "https://golang.org/dl/"
+    regex(/href=.*?go[._-]?v?(\d+(?:\.\d+)+)[._-]src\.t/i)
+  end
+
   bottle do
-    sha256 "bbecee76043eeb6d34f76565faaa856a9bbfb2dd052d63dcd5c6326059ab7898" => :catalina
-    sha256 "d653d2c8faf8b8c0e2152082e7d9cbfbae0d46c1c66f04d58517234d93bbe39e" => :mojave
-    sha256 "edd810c7103a4080220cc929820f1cdd56c8dc0c11cab53f5738d37532750e24" => :high_sierra
+    sha256 "e4186a216bf028261cbb193edb6df988bf804a75384dd2ac00eb2cc3f768dada" => :catalina
+    sha256 "3ec02ff078dcfab49bb1c05b30eac11962358ce66f9ac82d70ad43be10247c02" => :mojave
+    sha256 "651e5f5fcb413f5efcb70512954d086afc48a047ec70e23683f2b2fc64fb06c3" => :high_sierra
   end
 
   head do
@@ -28,8 +33,6 @@ class Go < Formula
       url "https://go.googlesource.com/tools.git"
     end
   end
-
-  depends_on macos: :el_capitan
 
   # Don't update this unless this version cannot bootstrap the new version.
   resource "gobootstrap" do
@@ -50,7 +53,6 @@ class Go < Formula
 
     cd "src" do
       ENV["GOROOT_FINAL"] = libexec
-      ENV["GOOS"]         = "darwin"
       system "./make.bash", "--no-clean"
     end
 

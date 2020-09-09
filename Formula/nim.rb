@@ -1,15 +1,16 @@
 class Nim < Formula
   desc "Statically typed compiled systems programming language"
   homepage "https://nim-lang.org/"
-  url "https://nim-lang.org/download/nim-1.2.4.tar.xz"
-  sha256 "eef18f32fabe65f0d06a40f32e297d1f6daba66463c33f3ab57edc4d3530d636"
+  url "https://nim-lang.org/download/nim-1.2.6.tar.xz"
+  sha256 "df88ea712e96ea847b610d56ef69f46ba587002052a46bf03c5c62affac7657e"
   license "MIT"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "d9893915c7306617053c8e74b383315a573d624e396e1fa9c9bef069446d29b5" => :catalina
-    sha256 "206367c0fec082a793187aff91fe92cb350cd95db78ec96d844d488ee4e88a64" => :mojave
-    sha256 "57cfb08ba8102472526a48cb9870b8a2ce32fd864ff10c9a833c8d78aac70766" => :high_sierra
+    rebuild 1
+    sha256 "6e05e9295d4fcde5dfd166b042be425d21538bb307a3f3deeb3b9c13faa1d5eb" => :catalina
+    sha256 "6abb369c6954938d780ba11bbb1dd4adbf60e65829c1d2eb8dcfa409815d084b" => :mojave
+    sha256 "00eb986f798a638aff7abcc0dde85c337fcff85eee58fc70985040b7a9f43381" => :high_sierra
   end
 
   head do
@@ -18,6 +19,8 @@ class Nim < Formula
       url "https://github.com/nim-lang/csources.git"
     end
   end
+
+  depends_on "help2man" => :build
 
   def install
     if build.head?
@@ -37,10 +40,15 @@ class Nim < Formula
     system "./koch", "geninstall"
     system "/bin/sh", "install.sh", prefix
 
+    system "help2man", "bin/nim", "-o", "nim.1", "-N"
+    man1.install "nim.1"
+
     target = prefix/"nim/bin"
     bin.install_symlink target/"nim"
     tools = %w[nimble nimgrep nimpretty nimsuggest]
     tools.each do |t|
+      system "help2man", buildpath/"bin"/t, "-o", "#{t}.1", "-N"
+      man1.install "#{t}.1"
       target.install buildpath/"bin"/t
       bin.install_symlink target/t
     end

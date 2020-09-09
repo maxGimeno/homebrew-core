@@ -2,14 +2,19 @@ class V8 < Formula
   desc "Google's JavaScript engine"
   homepage "https://github.com/v8/v8/wiki"
   # Track V8 version from Chrome stable: https://omahaproxy.appspot.com
-  url "https://github.com/v8/v8/archive/8.4.371.19.tar.gz"
-  sha256 "cef6d0383a8ee8278e9c67fbd79c16141ce079693744b295c2040763089c9dd0"
+  url "https://github.com/v8/v8/archive/8.5.210.20.tar.gz"
+  sha256 "2170cb915178b484dd3200595ac5973a671bffc6788cb50e597192e4c2c7e1b1"
+
+  livecheck do
+    url "https://omahaproxy.appspot.com/all.json?os=mac&channel=stable"
+    regex(/"v8_version": "v?(\d+(?:\.\d+)+)"/i)
+  end
 
   bottle do
     cellar :any
-    sha256 "bb755bd7dd8e5e8ad08a535179ddc42fec3c84eb62363e76a892c5e0a5f82150" => :catalina
-    sha256 "36c8c76d89021ab33a42408042b4a8ef333baa5ee7b576b3e1a15edcf703de2d" => :mojave
-    sha256 "e6ce28c8b4fec5488d938a7d406f07a2d45ca5d8bea25d20daf7bea5acbf9f9d" => :high_sierra
+    sha256 "c4721944f5a0c239a0bddb72e743ca8a9223649f8fd5d7e48d4a5725858777bd" => :catalina
+    sha256 "c1e0ace651bf3dc216d5a538c55c09e0308b0b7a29b5016b73033a1114582ab4" => :mojave
+    sha256 "e3be1e7fd9b0bc73f6b13d8a078a339fc2788436236afbd931d3c32733a7e298" => :high_sierra
   end
 
   depends_on "llvm" => :build
@@ -21,13 +26,13 @@ class V8 < Formula
   # e.g. for CIPD dependency gn: https://github.com/v8/v8/blob/7.6.303.27/DEPS#L15
   resource "gn" do
     url "https://gn.googlesource.com/gn.git",
-      revision: "5ed3c9cc67b090d5e311e4bd2aba072173e82db9"
+      revision: "7d7e8deea36d126397bda2cf924682504271f0e1"
   end
 
   # e.g.: https://github.com/v8/v8/blob/7.6.303.27/DEPS#L60 for the revision of build for v8 7.6.303.27
   resource "v8/build" do
     url "https://chromium.googlesource.com/chromium/src/build.git",
-      revision: "1b904cc30093c25d5fd48389bd58e3f7409bcf80"
+      revision: "2dc7c7abc04253e340b60fa339151a92519f93d1"
 
     # revert usage of unsuported libtool option -D (fixes High Sierra support)
     patch do
@@ -38,17 +43,17 @@ class V8 < Formula
 
   resource "v8/third_party/icu" do
     url "https://chromium.googlesource.com/chromium/deps/icu.git",
-      revision: "f2223961702f00a8833874b0560d615a2cc42738"
+      revision: "79326efe26e5440f530963704c3c0ff965b3a4ac"
   end
 
   resource "v8/base/trace_event/common" do
     url "https://chromium.googlesource.com/chromium/src/base/trace_event/common.git",
-      revision: "dab187b372fc17e51f5b9fad8201813d0aed5129"
+      revision: "ef3586804494b7e402b6c1791d5dccdf2971afff"
   end
 
   resource "v8/third_party/googletest/src" do
     url "https://chromium.googlesource.com/external/github.com/google/googletest.git",
-      revision: "a09ea700d32bab83325aff9ff34d0582e50e3997"
+      revision: "4fe018038f87675c083d0cfb6a6b57c274fb1753"
   end
 
   resource "v8/third_party/jinja2" do
@@ -63,7 +68,7 @@ class V8 < Formula
 
   resource "v8/third_party/zlib" do
     url "https://chromium.googlesource.com/chromium/src/third_party/zlib.git",
-      revision: "90fc47e6eed7bd1a59ad1603761303ef24705593"
+      revision: "02daed1bb93a34cf89d68913f88708228e12a0ab"
   end
 
   def install

@@ -2,16 +2,16 @@ class MinioMc < Formula
   desc "Replacement for ls, cp and other commands for object storage"
   homepage "https://github.com/minio/mc"
   url "https://github.com/minio/mc.git",
-      tag:      "RELEASE.2020-07-11T05-18-52Z",
-      revision: "1513d76ca9d3a2cddda40d0e6e50be164b894889"
-  version "20200711051852"
+      tag:      "RELEASE.2020-09-03T00-08-28Z",
+      revision: "f99232260606ae4a6ef16613838d202765efa18c"
+  version "20200903000828"
   license "Apache-2.0"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "90a2778d25e46550bce6118d8a9eb322c5cfce8cbbef43eb7bd677b84359a229" => :catalina
-    sha256 "cf3ee2ffbc976df8fa698bc726a13c9940873afea43a53637573fe7e3b152afd" => :mojave
-    sha256 "45c7620f6cf8933139966b01a4a0a01cbf821cdeaae25364d40facc449a63fe1" => :high_sierra
+    sha256 "9750629887fa58c2781b5d196e1b4698cd14732939be39129b76bd46838841a4" => :catalina
+    sha256 "ef16e1f657e99451344fe207c322cd30f767de1403652dc2d32aea8637c44f1d" => :mojave
+    sha256 "bd54790c65a26c3fd798a8574cf29ecd60305183b31b52a7cc4b8624489054c0" => :high_sierra
   end
 
   depends_on "go" => :build
@@ -33,8 +33,6 @@ class MinioMc < Formula
         -X #{proj}/cmd.CommitID=#{minio_commit}
       EOS
     end
-
-    prefix.install_metafiles
   end
 
   test do

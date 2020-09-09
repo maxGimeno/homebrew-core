@@ -1,9 +1,15 @@
 class JettyRunner < Formula
   desc "Use Jetty without an installed distribution"
   homepage "https://www.eclipse.org/jetty/"
-  url "https://search.maven.org/remotecontent?filepath=org/eclipse/jetty/jetty-runner/9.4.30.v20200611/jetty-runner-9.4.30.v20200611.jar"
-  version "9.4.30.v20200611"
-  sha256 "5322b5232f48a7cacd1bc77f958140df75c2d550156316ef10901a9415d5ac17"
+  url "https://search.maven.org/remotecontent?filepath=org/eclipse/jetty/jetty-runner/9.4.31.v20200723/jetty-runner-9.4.31.v20200723.jar"
+  version "9.4.31.v20200723"
+  sha256 "70d8572a252017f2a97ddfde86d90b0d2d90ddd607bad8a75edaa27a05fb1e33"
+  revision 1
+
+  livecheck do
+    url "https://www.eclipse.org/jetty/download.html"
+    regex(/href=.*?jetty-distribution[._-]v?(\d+(?:\.\d+)+(?:\.v\d+)?)\.t/i)
+  end
 
   bottle :unneeded
 
@@ -11,12 +17,7 @@ class JettyRunner < Formula
 
   def install
     libexec.install Dir["*"]
-
-    (bin/"jetty-runner").write <<~EOS
-      #!/bin/bash
-      export JAVA_HOME="${JAVA_HOME:-#{Formula["openjdk"].opt_prefix}}"
-      exec "${JAVA_HOME}/bin/java" -jar "#{libexec}/jetty-runner-#{version}.jar" "$@"
-    EOS
+    bin.write_jar_script libexec/"jetty-runner-#{version}.jar", "jetty-runner"
   end
 
   test do

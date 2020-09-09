@@ -1,15 +1,14 @@
 class PostgresqlAT10 < Formula
   desc "Object-relational database system"
   homepage "https://www.postgresql.org/"
-  url "https://ftp.postgresql.org/pub/source/v10.13/postgresql-10.13.tar.bz2"
-  sha256 "4d701f450cd92ffb123cf6c296e9656abbc2ab7ea6507894ff1e2475ae0754e1"
+  url "https://ftp.postgresql.org/pub/source/v10.14/postgresql-10.14.tar.bz2"
+  sha256 "381cd8f491d8f77db2f4326974542a50095b5fa7709f24d7c5b760be2518b23b"
   license "PostgreSQL"
-  revision 3
 
   bottle do
-    sha256 "c812a9a2c22c61cbf408572a1a038ae5bac1c745eba15df0b0edf93543844813" => :catalina
-    sha256 "e4eb27c6604afda16097707ece291b7e4ce15d55f20e489c3a9d7e7d9bcc14da" => :mojave
-    sha256 "63157238b665f29e47a1a27aab8d707279d0d8dda4a60540c57ff804ec5c7a2f" => :high_sierra
+    sha256 "0d107a7007bfd7ad54bc2c341dd668b9b371d53a5bb51c18a32b6cc13fc6af95" => :catalina
+    sha256 "3802455dc7dedea458b92c3f79a178a6748bd4ea916226523d7ca7ebed05790e" => :mojave
+    sha256 "6bf09daea4f52334c0d42ceb1c461117fb3cda07f5d0eb9fc6d7b7185f5adc0d" => :high_sierra
   end
 
   keg_only :versioned_formula
@@ -90,6 +89,11 @@ class PostgresqlAT10 < Formula
     <<~EOS
       To migrate existing data from a previous major version of PostgreSQL run:
         brew postgresql-upgrade-database
+
+      This formula has created a default database cluster with:
+        initdb #{var}/postgres
+      For more details, read:
+        https://www.postgresql.org/docs/#{version.major}/app-initdb.html
     EOS
   end
 

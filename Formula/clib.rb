@@ -1,16 +1,21 @@
 class Clib < Formula
   desc "Package manager for C programming"
   homepage "https://github.com/clibs/clib"
-  url "https://github.com/clibs/clib/archive/2.1.8.tar.gz"
-  sha256 "ce51dbf4176549ee63d5e221fbbab5acf539a89f9a3cbe54614c72e6811e0538"
+  url "https://github.com/clibs/clib/archive/2.2.0.tar.gz"
+  sha256 "f0afbfefa474508263b991e44939d04828a02c8cf28745f400bbe18bd240bf03"
   license "MIT"
   head "https://github.com/clibs/clib.git"
 
+  livecheck do
+    url :head
+    regex(/^v?(\d+(?:\.\d+)+)$/i)
+  end
+
   bottle do
     cellar :any_skip_relocation
-    sha256 "7882a46e2fcbd6555fe592cdbde91fe8c3a31d2380d720c2ea5332bffa8ddbba" => :catalina
-    sha256 "5b75e0f5b379f174a7c9bcb00fe1e8156d2abdf98f90c0b69e591d31541488c6" => :mojave
-    sha256 "99980929866e1dc1754d1736b0461ab284414428dc4ccc34a567a5eb5c49237a" => :high_sierra
+    sha256 "d54bfe10399007254b99030bccdda88022fad83ca4d38e6e52d23c862d8cea21" => :catalina
+    sha256 "c28e710c86b50f422f941887b04611bb4b74bdae8320b742e53817eac226f909" => :mojave
+    sha256 "d098874750e444935abef12e4cbe0e933e9e2c4b6fd52cdbeda1326e107deeb8" => :high_sierra
   end
 
   uses_from_macos "curl"

@@ -2,15 +2,16 @@ class Packetbeat < Formula
   desc "Lightweight Shipper for Network Data"
   homepage "https://www.elastic.co/products/beats/packetbeat"
   url "https://github.com/elastic/beats.git",
-    tag:      "v7.8.0",
-    revision: "f79387d32717d79f689d94fda1ec80b2cf285d30"
+    tag:      "v7.9.1",
+    revision: "ad823eca4cc74439d1a44351c596c12ab51054f5"
+  license "Apache-2.0"
   head "https://github.com/elastic/beats.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "ff43fefdb4651acf59bfcdbe49e0099a2b59f040fcc946747370808c208aceb4" => :catalina
-    sha256 "2f121a452bdae8308fc9ca93f42c06906c726437931a8ae52eb5a6df4a953a71" => :mojave
-    sha256 "d03f78cc6f07f38bc9ae4f0ce11892234570f01042fb0bb9b44babd1d368ea3f" => :high_sierra
+    sha256 "3663d1d91647ba4f84e1dfb6968925cd0bbb3c35d929da957d5d60cb2b2d9fe8" => :catalina
+    sha256 "24c78f515e5a045dde72077b0d970f3903e075de2a605a51da72438f64d7305e" => :mojave
+    sha256 "458216545a001905b7e395bda31a9f262da812f3cebb6c1a3985bfe998d09765" => :high_sierra
   end
 
   depends_on "go" => :build
@@ -19,6 +20,13 @@ class Packetbeat < Formula
   resource "virtualenv" do
     url "https://files.pythonhosted.org/packages/b1/72/2d70c5a1de409ceb3a27ff2ec007ecdd5cc52239e7c74990e32af57affe9/virtualenv-15.2.0.tar.gz"
     sha256 "1d7e241b431e7afce47e77f8843a276f652699d1fa4f93b9d8ce0076fd7b0b54"
+  end
+
+  # Update MarkupSafe to 1.1.1, remove with next release
+  # https://github.com/elastic/beats/pull/20105
+  patch do
+    url "https://github.com/elastic/beats/commit/5a6ca609259956ff5dd8e4ec80b73e6c96ff54b2.patch?full_index=1"
+    sha256 "b362f8921611297a0879110efcb88a04cf660d120ad81cd078356d502ba4c2ce"
   end
 
   def install
@@ -41,7 +49,7 @@ class Packetbeat < Formula
     cd "src/github.com/elastic/beats/packetbeat" do
       system "make", "mage"
       # prevent downloading binary wheels during python setup
-      system "make", "PIP_INSTALL_COMMANDS=--no-binary :all", "python-env"
+      system "make", "PIP_INSTALL_PARAMS=--no-binary :all", "python-env"
       system "mage", "-v", "build"
       ENV.deparallelize
       system "mage", "-v", "update"

@@ -2,15 +2,16 @@ class Argo < Formula
   desc "Get stuff done with container-native workflows for Kubernetes"
   homepage "https://argoproj.io"
   url "https://github.com/argoproj/argo.git",
-      tag:      "v2.9.4",
-      revision: "20d2ace3d5344db68ce1bc2a250bbb1ba9862613"
+      tag:      "v2.10.1",
+      revision: "854444e47ac00d146cb83d174049bfbb2066bfb2"
   license "Apache-2.0"
+  revision 1
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "bd3ec57664e6a9febeb2b46ed1819538f074219d9f91956a74617dc4326c7e4c" => :catalina
-    sha256 "14526db90cf7076b4c365279e1f1ec31804bd7a18122008836f4ddf1fb72941c" => :mojave
-    sha256 "a5d57bb86d96062ff009e4b179b253bd79f83fc79b4d64e93fe95d99b1f49ca9" => :high_sierra
+    sha256 "a2992d27e2888f34d7c035112508106f437e04bbbe7178d34f8a9908adbd4106" => :catalina
+    sha256 "1ff5a9cc742fe9e657e8e2e67337ffcf3d8f083af8a2d45b5fde459859cea281" => :mojave
+    sha256 "d7febd066562584d6ccb69971a5071adce894c5df10f331212ee84ae682b5fda" => :high_sierra
   end
 
   depends_on "go" => :build
@@ -22,6 +23,11 @@ class Argo < Formula
     inreplace "Makefile", "CGO_ENABLED=0", ""
     system "make", "dist/argo"
     bin.install "dist/argo"
+
+    output = Utils.safe_popen_read("#{bin}/argo", "completion", "bash")
+    (bash_completion/"argo").write output
+    output = Utils.safe_popen_read("#{bin}/argo", "completion", "zsh")
+    (zsh_completion/"_argo").write output
   end
 
   test do

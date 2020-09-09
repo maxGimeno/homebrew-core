@@ -3,17 +3,20 @@ class Liquidctl < Formula
 
   desc "Cross-platform tool and drivers for liquid coolers and other devices"
   homepage "https://github.com/jonasmalacofilho/liquidctl"
-  url "https://files.pythonhosted.org/packages/f6/e4/ba85351cde1be689bd7250f96fd4e48a78988f723843fbbe5b67596edfa2/liquidctl-1.3.3.tar.gz"
-  sha256 "d13180867e07420c5890fe1110e8f45fe343794549a9ed7d5e8e76663bc10c24"
+  url "https://files.pythonhosted.org/packages/7d/92/5f6eb3f70e4de0241301927593a12e4622e89a9445f5e87bdbb19ddd5a62/liquidctl-1.4.1.tar.gz"
+  sha256 "59a3bc65b3f3e71a5714224401fe6e95dfdee591a1d6f4392bc4e6d6ad72ff8d"
   license "GPL-3.0"
-  revision 1
   head "https://github.com/jonasmalacofilho/liquidctl.git"
+
+  livecheck do
+    url :stable
+  end
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "2a4cf0ea659a3c804db46938fe1a316d8f5a0703d60cf46e49ba1b7c844e2cdd" => :catalina
-    sha256 "7b1504d64c34b3a648c8f37e56b158b6bacfeded9161bbd07bfeaeb77d2cdd7f" => :mojave
-    sha256 "f0fee1b1424c42d7da02f3321722a5a58272464fc0dc62ee44925da0c3705b64" => :high_sierra
+    sha256 "2ac17a2c76c3e9573fa25446b3163d6d12971717a5fffe398a0bfed1b96cc0cb" => :catalina
+    sha256 "751f952fd1716a93878e4260706f9b704bb7131cd187426caa66092e6ea442de" => :mojave
+    sha256 "a792d9ed36334e5b7a3d56b84445a630dd5cfc1124cf1da1271399368d0e7214" => :high_sierra
   end
 
   depends_on "libusb"
@@ -25,8 +28,8 @@ class Liquidctl < Formula
   end
 
   resource "hidapi" do
-    url "https://files.pythonhosted.org/packages/7c/a0/d5ca6f191c8860a4769ba19448d2b2d6b3e2ca2c30aa61bb96a3f6bd25ba/hidapi-0.9.0.post2.tar.gz"
-    sha256 "a71dd3c153cb6bb2b73d2612b5ab262830d78c6428f33f0c06818749e64c9320"
+    url "https://files.pythonhosted.org/packages/ee/e9/b2ec08690c280a0eaa4777bf829db6b5d269903d4e8e9ce82f079c837d5a/hidapi-0.9.0.post3.tar.gz"
+    sha256 "5a2442928f17ba742d9c53073f48b152051c5747d758d2fefd937543da5ab2e5"
   end
 
   resource "pyusb" do

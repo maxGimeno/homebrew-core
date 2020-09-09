@@ -1,15 +1,15 @@
 class Comby < Formula
   desc "Tool for changing code across many languages"
   homepage "https://comby.dev"
-  url "https://github.com/comby-tools/comby/archive/0.17.0.tar.gz"
-  sha256 "5f45a49b1d2e412e2774333df43a4955e585098b748db484a520e98b57385c91"
+  url "https://github.com/comby-tools/comby/archive/0.18.3.tar.gz"
+  sha256 "554ec0fa7c8da8aa9ae74bdd6d3f7ba32e0f553ff9bb12c7add6541cd4ec27d8"
   license "Apache-2.0"
 
   bottle do
     cellar :any
-    sha256 "1524fc2784febfc37d3367de7652b4a49699d57b2b7b6730fc0f3041cf0cf0b7" => :catalina
-    sha256 "896f126e24879488e8ad0f3f3497c55abc9d1992d3e0121f5e6a2530bb2b6197" => :mojave
-    sha256 "b6e623302a2fdabd2b82bdc111373224076d8b4145fb23ea76618c0a585c3ef9" => :high_sierra
+    sha256 "959812e91094978e5373616ed3063ba60d3c931cb9aa01d25423f63afda70aa0" => :catalina
+    sha256 "f939a6986d210cdd1c670f22c43ea2cb0826e57efc3b62a192e2b4271a7505e8" => :mojave
+    sha256 "fcd39a3f32104e6fe6141ea87c93c334f2c30c57f44500070f8a8a0045e0e785" => :high_sierra
   end
 
   depends_on "gmp" => :build

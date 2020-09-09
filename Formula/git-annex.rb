@@ -1,19 +1,22 @@
-require "language/haskell"
-
 class GitAnnex < Formula
-  include Language::Haskell::Cabal
-
   desc "Manage files with git without checking in file contents"
   homepage "https://git-annex.branchable.com/"
-  url "https://hackage.haskell.org/package/git-annex-8.20200720.1/git-annex-8.20200720.1.tar.gz"
-  sha256 "d6252697151ab01cc8f7a492dc5eb4b4e773c0d48771df360c82a7cca7a39c3c"
+  url "https://hackage.haskell.org/package/git-annex-8.20200810/git-annex-8.20200810.tar.gz"
+  sha256 "e631c9d52e440f80e9d305c95a078dcae71f200125bca91e49d5b8e2d864c6f3"
+  license all_of: ["AGPL-3.0-or-later", "BSD-2-Clause", "BSD-3-Clause",
+                   "GPL-2.0-only", "GPL-3.0-or-later", "MIT"]
+  revision 1
   head "git://git-annex.branchable.com/"
+
+  livecheck do
+    url :stable
+  end
 
   bottle do
     cellar :any
-    sha256 "0dc6cab32110246d38e26753141ac0772557cf303cf7a92f52edf1b4b2c9f625" => :catalina
-    sha256 "15cc50337736d3a405ca28665dc89e850e29d622a7233d0071249fa5fbe66eba" => :mojave
-    sha256 "215ae839c10f9fa39a236d0f7cd3bd9630b6c719a2d9e593bdd03b692c6bbc6e" => :high_sierra
+    sha256 "e23dc99d39075c848c34b8e0583b6afe93441f32cd13afa07f6315c22b299beb" => :catalina
+    sha256 "8dc165ccec6d3f43577b609ffb0d10a4d12601345eff6fab5a99f6e3482f8047" => :mojave
+    sha256 "4f27733b74710acca484ee82a17afaec13561e32b32d386d2839f6ed4e5442d6" => :high_sierra
   end
 
   depends_on "cabal-install" => :build
@@ -24,10 +27,9 @@ class GitAnnex < Formula
   depends_on "quvi"
 
   def install
-    install_cabal_package "--constraint", "http-conduit>=2.3",
-                          "--constraint", "network>=2.6.3.0",
-                          using: ["alex", "happy", "c2hs"],
-                          flags: ["s3", "webapp"]
+    system "cabal", "v2-update"
+    system "cabal", "v2-install", *std_cabal_v2_args,
+                    "--flags=+S3"
     bin.install_symlink "git-annex" => "git-annex-shell"
   end
 
@@ -69,6 +71,11 @@ class GitAnnex < Formula
     assert_match /^add Hello.txt.*ok.*\(recording state in git\.\.\.\)/m, shell_output("git annex add .")
     system "git", "commit", "-a", "-m", "Initial Commit"
     assert File.symlink?("Hello.txt")
+
+    # make sure the various remotes were built
+    assert_match shell_output("git annex version | grep 'remote types:'").chomp,
+                 "remote types: git gcrypt p2p S3 bup directory rsync web bittorrent " \
+                 "webdav adb tahoe glacier ddar git-lfs hook external"
 
     # The steps below are necessary to ensure the directory cleanly deletes.
     # git-annex guards files in a way that isn't entirely friendly of automatically

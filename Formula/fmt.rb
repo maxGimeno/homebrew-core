@@ -1,15 +1,15 @@
 class Fmt < Formula
   desc "Open-source formatting library for C++"
-  homepage "https://fmtlib.github.io/"
-  url "https://github.com/fmtlib/fmt/archive/7.0.1.tar.gz"
-  sha256 "ac335a4ca6beaebec4ddb2bc35b9ae960b576f3b64a410ff2c379780f0cd4948"
+  homepage "https://fmt.dev/"
+  url "https://github.com/fmtlib/fmt/archive/7.0.3.tar.gz"
+  sha256 "b4b51bc16288e2281cddc59c28f0b4f84fed58d016fb038273a09f05f8473297"
   license "MIT"
 
   bottle do
     cellar :any
-    sha256 "c214a12c77f38844d841457492cc4f36313579b62fa19b6649fe6b4c50171bb7" => :catalina
-    sha256 "466655f03e704f70d47078f2f7b59239cfe35c718222a94e0ea0c7354382e78d" => :mojave
-    sha256 "41c2cbcd32a6c4ee8dc95d904319870f228f0a34dfd34388b9d2a2149b477118" => :high_sierra
+    sha256 "ecc628fabb67ff7f03a9fbe916ad629e30e6add398c84750c0af55ea5b261bd7" => :catalina
+    sha256 "a037d74f6005e7df7b7f080b3a3f643c229e315dec0e948851f64cadaed4764d" => :mojave
+    sha256 "6e5496f417d00981661d6d716125cde6b7e6502827735d3c0d726fc63407b283" => :high_sierra
   end
 
   depends_on "cmake" => :build
@@ -17,6 +17,10 @@ class Fmt < Formula
   def install
     system "cmake", ".", "-DBUILD_SHARED_LIBS=TRUE", *std_cmake_args
     system "make", "install"
+    system "make", "clean"
+    system "cmake", ".", "-DBUILD_SHARED_LIBS=FALSE", *std_cmake_args
+    system "make"
+    lib.install "libfmt.a"
   end
 
   test do

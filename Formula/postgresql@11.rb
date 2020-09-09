@@ -1,15 +1,14 @@
 class PostgresqlAT11 < Formula
   desc "Object-relational database system"
   homepage "https://www.postgresql.org/"
-  url "https://ftp.postgresql.org/pub/source/v11.8/postgresql-11.8.tar.bz2"
-  sha256 "eaf2f4329ccc349c89e950761b81daf8c99bb8966abcab5665ccd6ee95c77ae2"
+  url "https://ftp.postgresql.org/pub/source/v11.9/postgresql-11.9.tar.bz2"
+  sha256 "35618aa72e0372091f923c42389c6febd07513157b4fbb9408371706afbb6635"
   license "PostgreSQL"
-  revision 3
 
   bottle do
-    sha256 "420e0588a9c7d13bd60dbd14cd825e3ab94e8190aceae83a326469c2069eccff" => :catalina
-    sha256 "0f53a997e555a3dd79d58494b0b5d5e11d0d01bb20db2084d544cc750125ab2b" => :mojave
-    sha256 "2e37db63328194a9445083afbbd2e6ef22535bd6b15ba4514ee231b75e5a74f0" => :high_sierra
+    sha256 "6ae4d48f4eb3af904ff8bb4a4cd6194500272847636261a049559059a312ac10" => :catalina
+    sha256 "816c4f41cc68aa079c3b8840a414ace69006bff6914160a8bfe86d5365cf84eb" => :mojave
+    sha256 "01b6df74f7598494a9d31a6c017bbc7b17e78c6606603387766006705a7914d7" => :high_sierra
   end
 
   keg_only :versioned_formula
@@ -82,6 +81,11 @@ class PostgresqlAT11 < Formula
     <<~EOS
       To migrate existing data from a previous major version of PostgreSQL run:
         brew postgresql-upgrade-database
+
+      This formula has created a default database cluster with:
+        initdb --locale=C -E UTF-8 #{var}/postgres
+      For more details, read:
+        https://www.postgresql.org/docs/#{version.major}/app-initdb.html
     EOS
   end
 

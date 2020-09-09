@@ -1,9 +1,9 @@
 class Checkstyle < Formula
   desc "Check Java source against a coding standard"
   homepage "https://checkstyle.sourceforge.io/"
-  url "https://github.com/checkstyle/checkstyle/releases/download/checkstyle-8.34/checkstyle-8.34-all.jar"
-  sha256 "ebbb437784e68983c4d89a7fd09080d092050985564eea3628be289b416bf461"
-  license "LGPL-2.1"
+  url "https://github.com/checkstyle/checkstyle/releases/download/checkstyle-8.36/checkstyle-8.36-all.jar"
+  sha256 "108a045d6aab90636fc6498023ad6dc39face7347ebf56066b7af4a9c0180fb9"
+  license "LGPL-2.1-or-later"
 
   bottle :unneeded
 

@@ -1,9 +1,14 @@
 class Crowdin < Formula
   desc "Command-line tool that allows to manage your resources with crowdin.com"
   homepage "https://support.crowdin.com/cli-tool/"
-  url "https://github.com/crowdin/crowdin-cli/releases/download/3.2.1/crowdin-cli.zip"
-  sha256 "953e8714ca114b21eabd8f588d4b1c9e8ac1d1df3621176fc08ce611200f3108"
+  url "https://github.com/crowdin/crowdin-cli/releases/download/3.2.2/crowdin-cli.zip"
+  sha256 "1973ba0fef1bfb499deb2606298fd1289e8f046692bcc0ae5561446fb8c5931f"
   license "MIT"
+
+  livecheck do
+    url "https://github.com/crowdin/crowdin-cli.git"
+    regex(/^v?(\d+(?:\.\d+)+)$/i)
+  end
 
   bottle :unneeded
 
@@ -11,10 +16,7 @@ class Crowdin < Formula
 
   def install
     libexec.install "crowdin-cli.jar"
-    (bin/"crowdin").write <<~EOS
-      #!/bin/bash
-      exec "#{Formula["openjdk"].opt_bin}/java" -jar "#{libexec}/crowdin-cli.jar" "$@"
-    EOS
+    bin.write_jar_script libexec/"crowdin-cli.jar", "crowdin"
   end
 
   test do

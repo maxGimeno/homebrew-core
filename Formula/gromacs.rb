@@ -4,6 +4,11 @@ class Gromacs < Formula
   url "https://ftp.gromacs.org/pub/gromacs/gromacs-2020.3.tar.gz"
   sha256 "903183691132db14e55b011305db4b6f4901cc4912d2c56c131edfef18cc92a9"
 
+  livecheck do
+    url "https://ftp.gromacs.org/pub/gromacs/"
+    regex(/href=.*?gromacs[._-]v?(\d+(?:\.\d+)*)\.t/i)
+  end
+
   bottle do
     sha256 "88bd44a6a167f4f2acc57dc9cb9eff739131cd1249da2e390ebbb51e0b28e18d" => :catalina
     sha256 "d2b0f9fc2b1a360ee1e9786a54ac1815f450479173c497a3993719d4878ca7e8" => :mojave
@@ -24,9 +29,10 @@ class Gromacs < Formula
     inreplace "src/gromacs/gromacs-toolchain.cmake.cmakein", "@CMAKE_LINKER@",
                                                              "/usr/bin/ld"
 
+    gcc_major_ver = Formula["gcc"].any_installed_version.major
     args = std_cmake_args + %W[
-      -DCMAKE_C_COMPILER=gcc-#{Formula["gcc"].version_suffix}
-      -DCMAKE_CXX_COMPILER=g++-#{Formula["gcc"].version_suffix}
+      -DCMAKE_C_COMPILER=gcc-#{gcc_major_ver}
+      -DCMAKE_CXX_COMPILER=g++-#{gcc_major_ver}
     ]
 
     mkdir "build" do

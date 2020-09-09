@@ -1,16 +1,21 @@
 class Node < Formula
   desc "Platform built on V8 to build network applications"
   homepage "https://nodejs.org/"
-  url "https://nodejs.org/dist/v14.6.0/node-v14.6.0.tar.xz"
-  sha256 "5af300c736088ce8ecabc64ea036ccbf56cf6d072c7374985e7cd7ecdc016a94"
+  url "https://nodejs.org/dist/v14.9.0/node-v14.9.0.tar.gz"
+  sha256 "413d91191bd69ce1cfdb956116461db4f70f2019f10f78802db545ad3e341b39"
   license "MIT"
   head "https://github.com/nodejs/node.git"
 
+  livecheck do
+    url "https://nodejs.org/dist/"
+    regex(%r{href=["']?v?(\d+(?:\.\d+)+)/?["' >]}i)
+  end
+
   bottle do
     cellar :any
-    sha256 "92ba6eed14716fbc2c6506d59e25927f7263a4880e5f26dc5a70adae46143a38" => :catalina
-    sha256 "3f481ad3bf8f219d32b60d8ac98984e4dc203296ad1c36af2d13f81422cb376f" => :mojave
-    sha256 "af081c7120327edbb04fc6c6ed43cc0dc758b973a9c025bbdb24aef9bd98ac00" => :high_sierra
+    sha256 "df9d87a46dfa38140b2742ab1b00121825b92aabbcd98be2b8c7b4900752f749" => :catalina
+    sha256 "f9c186c264f8b4511b981a7332ffaddd6e58cab2276c45e87c0e75d35a55e43f" => :mojave
+    sha256 "2996971a08a2db37f99390a82e5c94850f8dca1006827ce9669ec96bd249b64e" => :high_sierra
   end
 
   depends_on "pkg-config" => :build
@@ -31,6 +36,9 @@ class Node < Formula
     # Never install the bundled "npm", always prefer our
     # installation from tarball for better packaging control.
     args = %W[--prefix=#{prefix} --without-npm --with-intl=system-icu]
+    # Remove `--openssl-no-asm` workaround when upstream releases a fix
+    # See also: https://github.com/nodejs/node/issues/34043
+    args << "--openssl-no-asm" if Hardware::CPU.arm?
     args << "--tag=head" if build.head?
 
     system "./configure", *args

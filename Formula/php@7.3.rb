@@ -2,23 +2,24 @@ class PhpAT73 < Formula
   desc "General-purpose scripting language"
   homepage "https://www.php.net/"
   # Should only be updated if the new version is announced on the homepage, https://www.php.net/
-  url "https://www.php.net/distributions/php-7.3.20.tar.xz"
-  mirror "https://fossies.org/linux/www/php-7.3.20.tar.xz"
-  sha256 "43292046f6684eb13acb637276d4aa1dd9f66b0b7045e6f1493bc90db389b888"
+  url "https://www.php.net/distributions/php-7.3.22.tar.xz"
+  mirror "https://fossies.org/linux/www/php-7.3.22.tar.xz"
+  sha256 "0e66606d3bdab5c2ae3f778136bfe8788e574913a3d8138695e54d98562f1fb5"
   license "PHP-3.01"
 
   bottle do
-    sha256 "cc1ad9e9b7d3f0a51849a1b9a28415bed3f592fe70bfb0d429e1efa5ddeb80e4" => :catalina
-    sha256 "8f1ab87a3e6c1b776792f9e8e5fdd763362d8ae2fb8fdebe2411fc575e3debaa" => :mojave
-    sha256 "7272926cf0c1ead42efd7789bb36533babff024baf9d9944040fa8ea6747ec7b" => :high_sierra
+    sha256 "7ac04487f43382329a46499cb6c789994c1c9bcb501fd024d55b0ac4c71a7063" => :catalina
+    sha256 "a700b78f4635f46ebbdc4c56d85ee3421e4bdc523fcf9fbecfad230b45ab225d" => :mojave
+    sha256 "d4847acd6ce4c05f35840e65979b4512a513d5afcc0f29b62b91604bb9d015a6" => :high_sierra
   end
 
   keg_only :versioned_formula
 
-  deprecate! date: "2021-12-06"
+  deprecate! date: "2021-12-06", because: :versioned_formula
 
   depends_on "httpd" => [:build, :test]
   depends_on "pkg-config" => :build
+  depends_on "xz" => :build
   depends_on "apr"
   depends_on "apr-util"
   depends_on "argon2"
@@ -44,6 +45,7 @@ class PhpAT73 < Formula
   depends_on "webp"
 
   uses_from_macos "bzip2"
+  uses_from_macos "libedit"
   uses_from_macos "libxml2"
   uses_from_macos "libxslt"
   uses_from_macos "zlib"
@@ -88,7 +90,7 @@ class PhpAT73 < Formula
     # Required due to icu4c dependency
     ENV.cxx11
 
-    config_path = etc/"php/#{php_version}"
+    config_path = etc/"php/#{version.major_minor}"
     # Prevent system pear config from inhibiting pear install
     (config_path/"pear.conf").delete if (config_path/"pear.conf").exist?
 
@@ -241,10 +243,10 @@ class PhpAT73 < Formula
     php_ext_dir = opt_prefix/"lib/php"/php_basename
 
     # fix pear config to install outside cellar
-    pear_path = HOMEBREW_PREFIX/"share/pear@#{php_version}"
+    pear_path = HOMEBREW_PREFIX/"share/pear@#{version.major_minor}"
     cp_r pkgshare/"pear/.", pear_path
     {
-      "php_ini"  => etc/"php/#{php_version}/php.ini",
+      "php_ini"  => etc/"php/#{version.major_minor}/php.ini",
       "php_dir"  => pear_path,
       "doc_dir"  => pear_path/"doc",
       "ext_dir"  => pecl_path/php_basename,
@@ -265,7 +267,7 @@ class PhpAT73 < Formula
     %w[
       opcache
     ].each do |e|
-      ext_config_path = etc/"php/#{php_version}/conf.d/ext-#{e}.ini"
+      ext_config_path = etc/"php/#{version.major_minor}/conf.d/ext-#{e}.ini"
       extension_type = (e == "opcache") ? "zend_extension" : "extension"
       if ext_config_path.exist?
         inreplace ext_config_path,
@@ -292,12 +294,8 @@ class PhpAT73 < Formula
           DirectoryIndex index.php index.html
 
       The php.ini and php-fpm.ini file can be found in:
-          #{etc}/php/#{php_version}/
+          #{etc}/php/#{version.major_minor}/
     EOS
-  end
-
-  def php_version
-    version.to_s.split(".")[0..1].join(".")
   end
 
   plist_options manual: "php-fpm"

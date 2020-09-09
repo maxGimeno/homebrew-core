@@ -4,16 +4,18 @@ class Caddy < Formula
   url "https://github.com/caddyserver/caddy/archive/v2.1.1.tar.gz"
   sha256 "77beb13b39b670bfe9e0cc1c71b720d5b037cca60e1426a9a485bbfae34ba8d2"
   license "Apache-2.0"
+  revision 1
   head "https://github.com/caddyserver/caddy.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "7df16c3b4486a906b41875c7f0f3bba6f6483891d390630f9454f8d506c9d94a" => :catalina
-    sha256 "4f6d47929676c285640e5d1a0153197e6fdc049cbc776f492b12c593701c3585" => :mojave
-    sha256 "2d08ea709294ac4b08b85dad8e5328b9b3c478ebc9c4d745c0e02d694ee2eb90" => :high_sierra
+    rebuild 1
+    sha256 "847028dd3f176fb48afa9006530d98df57f355ff6bdb5a985d274b7ff45882f5" => :catalina
+    sha256 "002970585ed938b177d25c97828246f85ca2a591381c13d0f4c41a7f0fdb6bad" => :mojave
+    sha256 "db60499319ccada5f3a2a0c16b8ea86c00369b876a7491ba62c7b011db54e526" => :high_sierra
   end
 
-  depends_on "go" => :build
+  depends_on "go@1.14" => :build
 
   resource "xcaddy" do
     url "https://github.com/caddyserver/xcaddy/archive/v0.1.3.tar.gz"
@@ -24,7 +26,9 @@ class Caddy < Formula
     revision = build.head? ? version.commit : "v#{version}"
 
     resource("xcaddy").stage do
-      system "go", "run", "cmd/xcaddy/main.go", "build", revision, "--output", bin/"caddy"
+      system "go", "run", "cmd/xcaddy/main.go", "build", revision,
+                                                "--with", "github.com/caddyserver/caddy/v2=#{buildpath}",
+                                                "--output", bin/"caddy"
     end
   end
 
@@ -49,6 +53,10 @@ class Caddy < Formula
           </array>
           <key>RunAtLoad</key>
           <true/>
+          <key>StandardOutPath</key>
+          <string>#{var}/log/caddy.log</string>
+          <key>StandardErrorPath</key>
+          <string>#{var}/log/caddy.log</string>
         </dict>
       </plist>
     EOS

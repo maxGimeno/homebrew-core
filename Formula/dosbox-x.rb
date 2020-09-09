@@ -1,17 +1,22 @@
 class DosboxX < Formula
   desc "DOSBox with accurate emulation and wide testing"
   homepage "https://dosbox-x.com/"
-  url "https://github.com/joncampbell123/dosbox-x/archive/dosbox-x-v0.83.3.tar.gz"
-  sha256 "48f005949ada1ace8ad8c00bb27fad17d566e5bcdbec8be6078e44f8ad04759a"
-  license "GPL-2.0"
+  url "https://github.com/joncampbell123/dosbox-x/archive/dosbox-x-v0.83.5.tar.gz"
+  sha256 "debcd2370c260d1e90a3b42dccfa90406b2a51332d3e2dd7b50d92af5287370d"
+  license "GPL-2.0-or-later"
   version_scheme 1
   head "https://github.com/joncampbell123/dosbox-x.git"
 
+  livecheck do
+    url :head
+    regex(/^dosbox-x[._-]v?(\d+(?:\.\d+)+)$/i)
+  end
+
   bottle do
     cellar :any
-    sha256 "41c1d0c89b5e055b780b7530fc22aefa7cde6c45601f8b2f6cae636d5651bbf2" => :catalina
-    sha256 "3a0c9b8c27380b0863e22bc6859753018efb27619790d63681b4ebaccc39fb75" => :mojave
-    sha256 "12b85ee9411d6611508f8797db8092c29dc67cc621edf6dc74ddde0d0b18a126" => :high_sierra
+    sha256 "894c855137b98348bf3ff128f791c8d55024fccc06a83f1ff6bf5976627b04c5" => :catalina
+    sha256 "8e30f1c88dee6590f013874ce8b5df0832092905c5206aef9114104222ce073e" => :mojave
+    sha256 "07ee07cddd5cae6fabf84f9068d560b819c11a479bef8eaf3ab95b378ef4289a" => :high_sierra
   end
 
   depends_on "autoconf" => :build
@@ -19,13 +24,6 @@ class DosboxX < Formula
   depends_on "pkg-config" => :build
   depends_on "fluid-synth"
   depends_on macos: :high_sierra # needs futimens
-
-  # Remove with upstream release > 0.83.3
-  # https://github.com/joncampbell123/dosbox-x/pull/1715
-  patch do
-    url "https://github.com/joncampbell123/dosbox-x/commit/a8be3fcda5f91d8cff9f792b366cc05ad75eaef0.patch?full_index=1"
-    sha256 "39c96ae37b58a1410b0dc9cdc8b9c9bb8c55792395b2b049bebf3cb4c8838d20"
-  end
 
   def install
     ENV.cxx11

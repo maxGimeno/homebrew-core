@@ -4,15 +4,19 @@ class GatsbyCli < Formula
   desc "Gatsby command-line interface"
   homepage "https://www.gatsbyjs.org/docs/gatsby-cli/"
   # gatsby-cli should only be updated every 10 releases on multiples of 10
-  url "https://registry.npmjs.org/gatsby-cli/-/gatsby-cli-2.12.60.tgz"
-  sha256 "070cd7da3e1cad1b1ec48233c4232f38c444649dce918d8bb731b5b2c363c578"
+  url "https://registry.npmjs.org/gatsby-cli/-/gatsby-cli-2.12.90.tgz"
+  sha256 "37572b832940c61b58a288c816e41aefefb6356a4ac4a7b567a6216e67a3954c"
   license "MIT"
+
+  livecheck do
+    url :stable
+  end
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "d969a1f544386351e13ef846d3e281d541291f93372f6c0fe9446bbe89f32e0b" => :catalina
-    sha256 "34ea6a1dcdae2560be9e8f4f41a7a088cc7d46d0c744738ed94dd62bbf38eace" => :mojave
-    sha256 "8d8b89972f41d425bc6d0fc2ee0ee6ea19fceac6ed58a2ec28a6e493f556828f" => :high_sierra
+    sha256 "8c40749f4e362ad58e1312428882f13e1cedc3cf612ca02d82fd9efff7d898c0" => :catalina
+    sha256 "dedfd0cdfeaf1238995b448e68d847c52d4a8c942fe5eb2eb30acc84930f9540" => :mojave
+    sha256 "731794bbd7da8e7e18d38e0f41e7950ccaa33cdb11069f6de020d1a011aad2c5" => :high_sierra
   end
 
   depends_on "node"

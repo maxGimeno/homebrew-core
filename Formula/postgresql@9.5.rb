@@ -1,15 +1,19 @@
 class PostgresqlAT95 < Formula
   desc "Object-relational database system"
   homepage "https://www.postgresql.org/"
-  url "https://ftp.postgresql.org/pub/source/v9.5.22/postgresql-9.5.22.tar.bz2"
-  sha256 "48555470a17248cb204d25ab1ad4231ef16295db55161922f006b9942d69640f"
+  url "https://ftp.postgresql.org/pub/source/v9.5.23/postgresql-9.5.23.tar.bz2"
+  sha256 "e314fa7e3355c4b8a35e94eeb8e58a6cf46adf49a2f9afa0c15cbc39980c8366"
   license "PostgreSQL"
-  revision 2
+
+  livecheck do
+    url "https://www.postgresql.org/docs/9.5/static/release.html"
+    regex(/Release v?(\d+(?:\.\d+)+)/i)
+  end
 
   bottle do
-    sha256 "33a794b7202e738223650d25749061b779dba8a88f34078ed2d966635605d234" => :catalina
-    sha256 "192a8daaddd008b006953bec273ae12e4c0238c4c0b34ec9f7008e15654234d3" => :mojave
-    sha256 "5948803273679d81c357096eabca041fbbaaf7689b5caba8d7b2b745434750a9" => :high_sierra
+    sha256 "69659c35cc5a4d662cca1737f04bea2c64e55aaa91e660f4dd9abfe0d0545a64" => :catalina
+    sha256 "f8cf1f4bf66f44d7e4939e5885c02dc5c01f07036ef8d86c3be33d9f35eba26f" => :mojave
+    sha256 "7b0ade2c3d1e0a690dcfa83e897b39f73d032aab2526708606f255d6983ff8f3" => :high_sierra
   end
 
   keg_only :versioned_formula
@@ -99,6 +103,11 @@ class PostgresqlAT95 < Formula
 
         You will need your previous PostgreSQL installation from brew to perform `pg_upgrade`.
         Do not run `brew cleanup postgresql@9.5` until you have performed the migration.
+
+      This formula has created a default database cluster with:
+        initdb #{var}/postgres
+      For more details, read:
+        https://www.postgresql.org/docs/#{version.major}/app-initdb.html
     EOS
   end
 

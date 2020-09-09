@@ -2,18 +2,23 @@ class Semgrep < Formula
   include Language::Python::Virtualenv
 
   desc "Easily detect and prevent bugs and anti-patterns in your codebase"
-  homepage "https://semgrep.live"
+  homepage "https://semgrep.dev"
   url "https://github.com/returntocorp/semgrep.git",
-    tag:      "v0.16.0",
-    revision: "26bb98d50dd1350aee49ea9a345c12c271c9b0f4"
-  license "LGPL-2.1"
+    tag:      "v0.22.0",
+    revision: "4e93c08bbef2e0f4d00b4946c2e50c1805222057"
+  license "LGPL-2.1-only"
   head "https://github.com/returntocorp/semgrep.git", branch: "develop"
 
+  livecheck do
+    url :stable
+    regex(/^v?(\d+(?:\.\d+)+)$/i)
+  end
+
   bottle do
-    cellar :any_skip_relocation
-    sha256 "fd74e00de184b3bd348aec3f461d0dccef7e1d955074410636e7c02da6dc7ab3" => :catalina
-    sha256 "b3b0b0dca2467a3c63cb7598eac87c87de9f74eb8c52e8c1bb7ce36da337dd89" => :mojave
-    sha256 "e2d56a08024418f5978f99d84130ed451427674f1cfc04fdbdc405adc2e81aab" => :high_sierra
+    cellar :any
+    sha256 "a5500945cbf27495a253228cac5b646d435d14c1128b4fd1df6be707300424c8" => :catalina
+    sha256 "46686cf72454e3f7736cfa23246545471e787892617b047980d71cb0b240131f" => :mojave
+    sha256 "2c36d7764f844dc0e99df8c9510936c99955a31a60bd91e994d01c035023059d" => :high_sierra
   end
 
   depends_on "cmake" => :build
@@ -25,8 +30,8 @@ class Semgrep < Formula
   depends_on "python@3.8"
 
   resource "attrs" do
-    url "https://files.pythonhosted.org/packages/98/c3/2c227e66b5e896e15ccdae2e00bbc69aa46e9a8ce8869cc5fa96310bf612/attrs-19.3.0.tar.gz"
-    sha256 "f7b7ce16570fe9965acd6d30101a28f62fb4a7f9e926b3bbc9b61f8b04247e72"
+    url "https://files.pythonhosted.org/packages/c4/d4/c2b5232ecfc0783c697a81c13efc53a4fe285d4e2c00e0d8aed90495fade/attrs-20.1.0.tar.gz"
+    sha256 "0ef97238856430dcf9228e07f316aefc17e8939fc8507e18c6501b761ef1a42a"
   end
 
   resource "certifi" do
@@ -49,6 +54,11 @@ class Semgrep < Formula
     sha256 "b307872f855b18632ce0c21c5e45be78c0ea7ae4c15c828c20788b26921eb3f6"
   end
 
+  resource "jsonschema" do
+    url "https://files.pythonhosted.org/packages/69/11/a69e2a3c01b324a77d3a7c0570faa372e8448b666300c4117a516f8b1212/jsonschema-3.2.0.tar.gz"
+    sha256 "c8a85b28d377cc7737e46e2d9f2b4f44ee3c0e1deac6bf46ddefc7187d30797a"
+  end
+
   resource "packaging" do
     url "https://files.pythonhosted.org/packages/55/fd/fc1aca9cf51ed2f2c11748fa797370027babd82f87829c7a8e6dbe720145/packaging-20.4.tar.gz"
     sha256 "4357f74f47b9c12db93624a82154e9b120fa8293699949152b22065d556079f8"
@@ -57,6 +67,11 @@ class Semgrep < Formula
   resource "pyparsing" do
     url "https://files.pythonhosted.org/packages/c1/47/dfc9c342c9842bbe0036c7f763d2d6686bcf5eb1808ba3e170afdb282210/pyparsing-2.4.7.tar.gz"
     sha256 "c203ec8783bf771a155b207279b9bccb8dea02d8f0c9e5f8ead507bc3246ecc1"
+  end
+
+  resource "pyrsistent" do
+    url "https://files.pythonhosted.org/packages/9f/0d/cbca4d0bbc5671822a59f270e4ce3f2195f8a899c97d0d5abb81b191efb5/pyrsistent-0.16.0.tar.gz"
+    sha256 "28669905fe725965daa16184933676547c5bb40a5153055a8dee2a4bd7933ad3"
   end
 
   resource "requests" do
@@ -80,15 +95,14 @@ class Semgrep < Formula
   end
 
   resource "tqdm" do
-    url "https://files.pythonhosted.org/packages/71/6c/6530032ec26dddd47bb9e052781bcbbcaa560f05d10cdaf365ecb990d220/tqdm-4.48.0.tar.gz"
-    sha256 "6baa75a88582b1db6d34ce4690da5501d2a1cb65c34664840a456b2c9f794d29"
+    url "https://files.pythonhosted.org/packages/7c/a2/4cc95d7766a5d17ea2541d88da357d5905f75b6dbdfd17dfffd6c37647ae/tqdm-4.48.2.tar.gz"
+    sha256 "564d632ea2b9cb52979f7956e093e831c28d441c11751682f84c86fc46e4fd21"
   end
 
   resource "urllib3" do
     url "https://files.pythonhosted.org/packages/81/f4/87467aeb3afc4a6056e1fe86626d259ab97e1213b1dfec14c7cb5f538bf0/urllib3-1.25.10.tar.gz"
     sha256 "91056c15fa70756691db97756772bb1eb9678fa585d9184f24534b100dc60f4a"
   end
-
   def install
     ENV.deparallelize
     Dir.mktmpdir("opamroot") do |opamroot|
@@ -98,7 +112,13 @@ class Semgrep < Formula
       # Used by semgrep-core for clang to find libtree-sitter.a
       ENV["LIBRARY_PATH"] = lib
 
+      # Officially suggested workaround for breaking change in setuptools v50.0.0
+      # See: https://sourceforge.net/p/ruamel-yaml/tickets/356/
+      # Relevant Issue: https://github.com/pypa/setuptools/issues/2355
+      ENV["SETUPTOOLS_USE_DISTUTILS"] = "stdlib"
+
       # Used by ocaml-tree-sitter to find tree-sitter/*.h headers
+      ENV.append_path "PKG_CONFIG_PATH", "#{lib}/pkgconfig"
       ENV["C_INCLUDE_PATH"] = include
 
       # Used by tree-sitter to place libtree-sitter.a, and header files
@@ -107,15 +127,13 @@ class Semgrep < Formula
       system "opam", "init", "--no-setup", "--disable-sandboxing"
       ENV.deparallelize { system "opam", "switch", "create", "ocaml-base-compiler.4.10.0" }
 
-      system "opam", "exec", "--", "make", "config"
-      system "opam", "install", "./pfff"
+      system "opam", "exec", "--", "make", "setup"
 
       # Install tree-sitter
       cd "ocaml-tree-sitter" do
         cd "tree-sitter" do
           system "opam", "exec", "--", "make"
-          lib.install "libtree-sitter.a"
-          include.install "lib/include/tree_sitter"
+          system "opam", "exec", "--", "make", "install"
         end
         system "opam", "install", "-y", "."
       end

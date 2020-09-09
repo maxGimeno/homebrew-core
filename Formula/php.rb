@@ -2,15 +2,20 @@ class Php < Formula
   desc "General-purpose scripting language"
   homepage "https://www.php.net/"
   # Should only be updated if the new version is announced on the homepage, https://www.php.net/
-  url "https://www.php.net/distributions/php-7.4.8.tar.xz"
-  mirror "https://fossies.org/linux/www/php-7.4.8.tar.xz"
-  sha256 "642843890b732e8af01cb661e823ae01472af1402f211c83009c9b3abd073245"
+  url "https://www.php.net/distributions/php-7.4.10.tar.xz"
+  mirror "https://fossies.org/linux/www/php-7.4.10.tar.xz"
+  sha256 "c2d90b00b14284588a787b100dee54c2400e7db995b457864d66f00ad64fb010"
   license "PHP-3.01"
 
+  livecheck do
+    url "https://www.php.net/releases/feed.php"
+    regex(/PHP (\d+(?:\.\d+)+) /i)
+  end
+
   bottle do
-    sha256 "da81ec7dbe2ab2d9cbfcb5fcfa5f8e4fa0258f1947c52a13967c52dc6bab7f8f" => :catalina
-    sha256 "c5dab2822c4d18b48379a1351854020dc81a52c94e400a7129f68220daa59fca" => :mojave
-    sha256 "d6525030277bf523c2e80a8ae5d8a5b3f0ce84a7679ec79c1fb89f4109c0f2f7" => :high_sierra
+    sha256 "b4bf7b37671bf26dec1986a3be42416fb41e731b6d632f02fb2bc968379d4022" => :catalina
+    sha256 "983da87997888992e345cc5bbae84ab1bd1e20503c5a171a66533744001d1e9e" => :mojave
+    sha256 "7c8107f2c86c99cce71c35a9ce42ab4d88e35c7475a706bef1533d18c0f22982" => :high_sierra
   end
 
   head do
@@ -29,28 +34,26 @@ class Php < Formula
   depends_on "autoconf"
   depends_on "curl-openssl"
   depends_on "freetds"
-  depends_on "freetype"
+  depends_on "gd"
   depends_on "gettext"
   depends_on "glib"
   depends_on "gmp"
   depends_on "icu4c"
-  depends_on "jpeg"
+  depends_on "krb5"
   depends_on "libffi"
-  depends_on "libpng"
   depends_on "libpq"
   depends_on "libsodium"
   depends_on "libzip"
   depends_on "oniguruma"
   depends_on "openldap"
   depends_on "openssl@1.1"
+  depends_on "pcre2"
   depends_on "sqlite"
   depends_on "tidy-html5"
   depends_on "unixodbc"
-  depends_on "webp"
 
   uses_from_macos "xz" => :build
   uses_from_macos "bzip2"
-  uses_from_macos "krb5"
   uses_from_macos "libedit"
   uses_from_macos "libxml2"
   uses_from_macos "libxslt"
@@ -89,7 +92,7 @@ class Php < Formula
 
     inreplace "sapi/fpm/php-fpm.conf.in", ";daemonize = yes", "daemonize = no"
 
-    config_path = etc/"php/#{php_version}"
+    config_path = etc/"php/#{version.major_minor}"
     # Prevent system pear config from inhibiting pear install
     (config_path/"pear.conf").delete if (config_path/"pear.conf").exist?
 
@@ -97,12 +100,8 @@ class Php < Formula
     ENV["lt_cv_path_SED"] = "sed"
 
     # system pkg-config missing
-    ENV["KERBEROS_CFLAGS"] = " "
-    ENV["KERBEROS_LIBS"] = "-lkrb5"
     ENV["SASL_CFLAGS"] = "-I#{MacOS.sdk_path_if_needed}/usr/include/sasl"
     ENV["SASL_LIBS"] = "-lsasl2"
-    ENV["EDIT_CFLAGS"] = " "
-    ENV["EDIT_LIBS"] = "-ledit"
 
     # Each extension that is built on Mojave needs a direct reference to the
     # sdk path or it won't find the headers
@@ -141,14 +140,14 @@ class Php < Formula
       --with-apxs2=#{Formula["httpd"].opt_bin}/apxs
       --with-bz2#{headers_path}
       --with-curl
+      --with-external-gd
+      --with-external-pcre
       --with-ffi
       --with-fpm-user=_www
       --with-fpm-group=_www
-      --with-freetype
       --with-gettext=#{Formula["gettext"].opt_prefix}
       --with-gmp=#{Formula["gmp"].opt_prefix}
       --with-iconv#{headers_path}
-      --with-jpeg
       --with-kerberos
       --with-layout=GNU
       --with-ldap=#{Formula["openldap"].opt_prefix}
@@ -173,7 +172,6 @@ class Php < Formula
       --with-sqlite3
       --with-tidy=#{Formula["tidy-html5"].opt_prefix}
       --with-unixODBC
-      --with-webp
       --with-xmlrpc
       --with-xsl
       --with-zip
@@ -245,7 +243,7 @@ class Php < Formula
     pear_path = HOMEBREW_PREFIX/"share/pear"
     cp_r pkgshare/"pear/.", pear_path
     {
-      "php_ini"  => etc/"php/#{php_version}/php.ini",
+      "php_ini"  => etc/"php/#{version.major_minor}/php.ini",
       "php_dir"  => pear_path,
       "doc_dir"  => pear_path/"doc",
       "ext_dir"  => pecl_path/php_basename,
@@ -266,7 +264,7 @@ class Php < Formula
     %w[
       opcache
     ].each do |e|
-      ext_config_path = etc/"php/#{php_version}/conf.d/ext-#{e}.ini"
+      ext_config_path = etc/"php/#{version.major_minor}/conf.d/ext-#{e}.ini"
       extension_type = (e == "opcache") ? "zend_extension" : "extension"
       if ext_config_path.exist?
         inreplace ext_config_path,
@@ -293,12 +291,8 @@ class Php < Formula
           DirectoryIndex index.php index.html
 
       The php.ini and php-fpm.ini file can be found in:
-          #{etc}/php/#{php_version}/
+          #{etc}/php/#{version.major_minor}/
     EOS
-  end
-
-  def php_version
-    version.to_s.split(".")[0..1].join(".")
   end
 
   plist_options manual: "php-fpm"

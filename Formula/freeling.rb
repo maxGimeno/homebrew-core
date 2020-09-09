@@ -1,27 +1,25 @@
 class Freeling < Formula
   desc "Suite of language analyzers"
   homepage "http://nlp.lsi.upc.edu/freeling/"
-  url "https://github.com/TALP-UPC/FreeLing/archive/4.1.1.tar.gz"
-  sha256 "c58822f262e6a9c550ce7dd080025aa322a0801b61aff10d5d085f8c168bee60"
-  license "AGPL-3.0"
+  url "https://github.com/TALP-UPC/FreeLing/releases/download/4.2/FreeLing-src-4.2.tar.gz"
+  sha256 "ef0eac3c82b1d1eb6b87094043c744f6517b3bd639415040eaa6e1e6b298d425"
+  license "AGPL-3.0-only"
 
   bottle do
-    sha256 "5dd469d40bae3f742009896fa79d140730ebabcb2a3be596ac7f43eb223586c0" => :catalina
-    sha256 "440b48a5861925c697ea0612ebbb5c62e6b7ac4ce86dc9e0c4beac2849e72a76" => :mojave
-    sha256 "70f42b87f7684ca80c8c10d357225d2ae079c169255b79eec78c5757c2935475" => :high_sierra
+    rebuild 1
+    sha256 "680ce0ad080cd5e9b0415650464c198b9206ed1833791895322e5f0df4b781d5" => :catalina
+    sha256 "120ce824973a4dec44ca66988d80b067dd47bee0ec4ee8bd052d8a5ed45840aa" => :mojave
+    sha256 "11db1280b733420f74d65c273bb06884f93da15f91b954c5bb38bcca2ac45869" => :high_sierra
   end
 
   depends_on "cmake" => :build
   depends_on "boost"
   depends_on "icu4c"
 
+  conflicts_with "dynet", because: "freeling ships its own copy of dynet"
+  conflicts_with "eigen", because: "freeling ships its own copy of eigen"
+  conflicts_with "foma", because: "freeling ships its own copy of foma"
   conflicts_with "hunspell", because: "both install 'analyze' binary"
-
-  # Fix linking with icu4c
-  patch do
-    url "https://github.com/TALP-UPC/FreeLing/commit/5e323a5f3c7d2858a6ebb45617291b8d4126cedb.patch?full_index=1"
-    sha256 "0814211cd1fb9b075d370f10df71a4398bc93d64fd7f32ccba1e34fb4e6b7452"
-  end
 
   def install
     mkdir "build" do

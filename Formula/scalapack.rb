@@ -3,7 +3,13 @@ class Scalapack < Formula
   homepage "https://www.netlib.org/scalapack/"
   url "https://www.netlib.org/scalapack/scalapack-2.1.0.tgz"
   sha256 "61d9216cf81d246944720cfce96255878a3f85dec13b9351f1fa0fd6768220a6"
+  license "BSD-3-Clause"
   revision 2
+
+  livecheck do
+    url :homepage
+    regex(/href=.*?scalapack[._-]v?(\d+(?:\.\d+)+)\.t/i)
+  end
 
   bottle do
     cellar :any

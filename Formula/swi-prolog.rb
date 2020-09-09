@@ -3,7 +3,13 @@ class SwiProlog < Formula
   homepage "https://www.swi-prolog.org/"
   url "https://www.swi-prolog.org/download/stable/src/swipl-8.2.1.tar.gz"
   sha256 "331bc5093d72af0c9f18fc9ed83b88ef9ddec0c8d379e6c49fa43739c8bda2fb"
+  license "BSD-2-Clause"
   head "https://github.com/SWI-Prolog/swipl-devel.git"
+
+  livecheck do
+    url "https://www.swi-prolog.org/download/stable/src"
+    regex(/href=.*?swipl[._-]v?(\d+\.\d+\.\d+)\.t/i)
+  end
 
   bottle do
     sha256 "ff0b739f559d250bd0452f5567fa4484f8152145de2fc6d4854f74851bbbcd40" => :catalina

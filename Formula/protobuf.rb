@@ -1,15 +1,20 @@
 class Protobuf < Formula
   desc "Protocol buffers (Google's data interchange format)"
   homepage "https://github.com/protocolbuffers/protobuf/"
-  url "https://github.com/protocolbuffers/protobuf/releases/download/v3.12.3/protobuf-all-3.12.3.tar.gz"
-  sha256 "1a83f0525e5c8096b7b812181865da3c8637de88f9777056cefbf51a1eb0b83f"
-  revision 1
+  url "https://github.com/protocolbuffers/protobuf/releases/download/v3.13.0/protobuf-all-3.13.0.tar.gz"
+  sha256 "465fd9367992a9b9c4fba34a549773735da200903678b81b25f367982e8df376"
+  license "BSD-3-Clause"
+
+  livecheck do
+    url "https://github.com/protocolbuffers/protobuf/releases/latest"
+    regex(%r{href=.*?/tag/v?(\d+(?:\.\d+)+)["' >]}i)
+  end
 
   bottle do
     cellar :any
-    sha256 "73c3c25ebcdbec0d91e414ca8760e5a025d3506a416b9fc252384257a8aa180e" => :catalina
-    sha256 "bfee101eeff52eb1c8a12dd3ffc7e005bafa4297c92a142cb84e9ff7d21b5c83" => :mojave
-    sha256 "d1437b5112a4947f373a7160bae2403ae9a99b8b8c15b5b9dfcfca4ba395a687" => :high_sierra
+    sha256 "af2990ba0a6e5588ef2afbe2ea3378d3ef0ccb287bca040607b40b5628801113" => :catalina
+    sha256 "0a5b436cc6be687df3767294952475adc81744c241595ec55b32efbfdd3d1f38" => :mojave
+    sha256 "ca05568f7d2e45bab389b1e6024f38c79f86fa90fc66371453fd4e89bc62da1d" => :high_sierra
   end
 
   head do

@@ -1,26 +1,28 @@
 class Gh < Formula
   desc "GitHub command-line tool"
   homepage "https://github.com/cli/cli"
-  url "https://github.com/cli/cli/archive/v0.11.0.tar.gz"
-  sha256 "e2137491f269df179ded7066f641ae7879a40870be53170a0388310e904158b0"
+  url "https://github.com/cli/cli/archive/v0.12.0.tar.gz"
+  sha256 "227031cc381555da2a406bde7d5bfdd631979f635cda22537f206b5362cf6fc1"
   license "MIT"
+
+  livecheck do
+    url "https://github.com/cli/cli/releases/latest"
+    regex(%r{href=.*?/tag/v?(\d+(?:\.\d+)+)["' >]}i)
+  end
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "ee4b879f06935d40035318d4189d5c057e53c38c53e5d4e28ec6b458bd98ce22" => :catalina
-    sha256 "85cc073f44cbb43bd87e171fa505a770822e4655b5c92c2424d7aeac73fae727" => :mojave
-    sha256 "34074c761bd6200fd5d5a61e23434836e487febc0bee3336c93e8a1c4864715a" => :high_sierra
+    sha256 "51b23104f2778db7ce43b104f38bfc8ada18f9b00550ee47db022375f54e61ed" => :catalina
+    sha256 "9471ab6a21f5eb5423a0469fe90281550dd216e6cd502aff0e4ff3f88f886a7d" => :mojave
+    sha256 "8123d6f50e6b5f22b3e800aeff08a52e2a4295cd3921c9a3293508287d141ba9" => :high_sierra
   end
 
   depends_on "go" => :build
 
   def install
-    ldflags = %W[
-      -X github.com/cli/cli/command.Version=#{version}
-      -X github.com/cli/cli/command.BuildDate=#{Date.today}
-      -s -w
-    ]
-    system "make", "bin/gh", "manpages", "GO_LDFLAGS=#{ldflags.join(" ")}"
+    ENV["GH_VERSION"] = version.to_s
+    ENV["GO_LDFLAGS"] = "-s -w"
+    system "make", "bin/gh", "manpages"
     bin.install "bin/gh"
     man1.install Dir["share/man/man1/gh*.1"]
     (bash_completion/"gh").write `#{bin}/gh completion -s bash`

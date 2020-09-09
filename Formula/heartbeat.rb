@@ -1,17 +1,17 @@
 class Heartbeat < Formula
   desc "Lightweight Shipper for Uptime Monitoring"
-  homepage "https://www.elastic.co/products/beats/heartbeat"
+  homepage "https://www.elastic.co/beats/heartbeat"
   url "https://github.com/elastic/beats.git",
-      tag:      "v7.8.0",
-      revision: "f79387d32717d79f689d94fda1ec80b2cf285d30"
+      tag:      "v7.9.1",
+      revision: "ad823eca4cc74439d1a44351c596c12ab51054f5"
   license "Apache-2.0"
   head "https://github.com/elastic/beats.git"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "3ead08eebb8bf137e99ad3bb4ddeb272c97925b36322acddc617c25294f70567" => :catalina
-    sha256 "85a4feb68f6e1f5df44315eb5903c7fdcf0b52f39d674801544493722ff919a8" => :mojave
-    sha256 "b0ba82526d992d5a6f00ca58d61bbc23026300bf69349526fefe5713c2ece417" => :high_sierra
+    sha256 "de56c9624e799312c53a141cecbfa9270aa94538919f87baba729a8f94be8153" => :catalina
+    sha256 "5e9437a80c36905ce1720439ea46a6930231f8aeab8a871b731c2a14c2450f9d" => :mojave
+    sha256 "87dbb654c9b79722dc13b51c7e3d9107c6ee70757c4c1695612559d7f0f1d691" => :high_sierra
   end
 
   depends_on "go" => :build
@@ -20,6 +20,13 @@ class Heartbeat < Formula
   resource "virtualenv" do
     url "https://files.pythonhosted.org/packages/b1/72/2d70c5a1de409ceb3a27ff2ec007ecdd5cc52239e7c74990e32af57affe9/virtualenv-15.2.0.tar.gz"
     sha256 "1d7e241b431e7afce47e77f8843a276f652699d1fa4f93b9d8ce0076fd7b0b54"
+  end
+
+  # Update MarkupSafe to 1.1.1, remove with next release
+  # https://github.com/elastic/beats/pull/20105
+  patch do
+    url "https://github.com/elastic/beats/commit/5a6ca609259956ff5dd8e4ec80b73e6c96ff54b2.patch?full_index=1"
+    sha256 "b362f8921611297a0879110efcb88a04cf660d120ad81cd078356d502ba4c2ce"
   end
 
   def install
@@ -42,7 +49,7 @@ class Heartbeat < Formula
     cd "src/github.com/elastic/beats/heartbeat" do
       system "make", "mage"
       # prevent downloading binary wheels during python setup
-      system "make", "PIP_INSTALL_COMMANDS=--no-binary :all", "python-env"
+      system "make", "PIP_INSTALL_PARAMS=--no-binary :all", "python-env"
       system "mage", "-v", "build"
       ENV.deparallelize
       system "mage", "-v", "update"

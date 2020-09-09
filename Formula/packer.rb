@@ -2,16 +2,21 @@ class Packer < Formula
   desc "Tool for creating identical machine images for multiple platforms"
   homepage "https://packer.io"
   url "https://github.com/hashicorp/packer.git",
-      tag:      "v1.6.0",
-      revision: "b05ca9e9e1989e832e02b5f676917a5b9c683606"
+      tag:      "v1.6.2",
+      revision: "e3ac7de9655b3de4b0b0e0f7563fcfc17d6f5150"
   license "MPL-2.0"
   head "https://github.com/hashicorp/packer.git"
 
+  livecheck do
+    url "https://releases.hashicorp.com/packer/"
+    regex(%r{href=.*?v?(\d+(?:\.\d+)+)/?["' >]}i)
+  end
+
   bottle do
     cellar :any_skip_relocation
-    sha256 "84918bf57b75d3127afc1aefddeb90eafa5b9f9669cbb87e823a94822ec12aa9" => :catalina
-    sha256 "a6bea8c5bbe38a62d40e530b86d46ab747463affe288963adadd9334bf07c810" => :mojave
-    sha256 "653dcd30c77a8989039754053efbee6fe901db91866e675b8f0ff8e0d046195e" => :high_sierra
+    sha256 "9065b04cb9f3c1f2277f29fc1ce9091db863dbeffd11e199581ec5e7af9a1b11" => :catalina
+    sha256 "0f4da45578851b73b22f981f5ddd45b1952f37c59a6ff36f572478ec30a76f74" => :mojave
+    sha256 "877c268bc9e608dd5a98124361e159e2c6321669ff24f24140edbe1e0a62db6f" => :high_sierra
   end
 
   depends_on "go" => :build

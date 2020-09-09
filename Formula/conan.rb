@@ -3,16 +3,21 @@ class Conan < Formula
 
   desc "Distributed, open source, package manager for C/C++"
   homepage "https://github.com/conan-io/conan"
-  url "https://github.com/conan-io/conan/archive/1.27.1.tar.gz"
-  sha256 "614b8ff912e7699a0fab3ce223073bd7669852fc37d2bb26b44501cd973c286d"
+  url "https://github.com/conan-io/conan/archive/1.29.0.tar.gz"
+  sha256 "431a6fe7362754a2ace41568bdcf326a858ac09fc9bef4c3e3d3abeaf3719b05"
   license "MIT"
   head "https://github.com/conan-io/conan.git"
 
+  livecheck do
+    url "https://github.com/conan-io/conan/releases/latest"
+    regex(%r{href=.*?/tag/v?(\d+(?:\.\d+)+)["' >]}i)
+  end
+
   bottle do
     cellar :any
-    sha256 "c0f0e14ad1b3831e31ac2c1c0cbe1b80424ca03047c956c4263e7068aa3f9b9a" => :catalina
-    sha256 "db8bc0eded3544aa54fd9c28280dd2db23e565fc0483340e165a08341cceed67" => :mojave
-    sha256 "80645c4aa1e555d0e50518b745ac10ae120d6ebc4ac8cc24168d9fea2c54c05a" => :high_sierra
+    sha256 "b59864660144a7ca0213ce012a9ab17031c84fe8ffc9e7d215450f8a10689776" => :catalina
+    sha256 "60330358cde6a430ece2541db9faaf6b08541203d117ce4fcc7f167eab854cf9" => :mojave
+    sha256 "13e993ac34260d7aef694f1d8f9d1698cde6791b16dbf2ad644f7ea144d0e80d" => :high_sierra
   end
 
   depends_on "pkg-config" => :build
@@ -21,8 +26,8 @@ class Conan < Formula
   depends_on "python@3.8"
 
   resource "asn1crypto" do
-    url "https://files.pythonhosted.org/packages/9f/3d/8beae739ed8c1c8f00ceac0ab6b0e97299b42da869e24cf82851b27a9123/asn1crypto-1.3.0.tar.gz"
-    sha256 "5a215cb8dc12f892244e3a113fe05397ee23c5c4ca7a69cd6e69811755efc42d"
+    url "https://files.pythonhosted.org/packages/6b/b4/42f0e52ac2184a8abb31f0a6f98111ceee1aac0b473cee063882436e0e09/asn1crypto-1.4.0.tar.gz"
+    sha256 "f4f6e119474e58e04a2b1af817eb585b4fd72bdd89b998624712b5c99be7641c"
   end
 
   resource "bottle" do
@@ -36,8 +41,8 @@ class Conan < Formula
   end
 
   resource "cffi" do
-    url "https://files.pythonhosted.org/packages/05/54/3324b0c46340c31b909fcec598696aaec7ddc8c18a63f2db352562d3354c/cffi-1.14.0.tar.gz"
-    sha256 "2d384f4a127a15ba701207f7639d94106693b6cd64173d6c8988e2c25f3ac2b6"
+    url "https://files.pythonhosted.org/packages/f7/09/88bbe20b76ca76be052c366fe77aa5e3cd6e5f932766e5597fecdd95b2a8/cffi-1.14.2.tar.gz"
+    sha256 "ae8f34d50af2c2154035984b8b5fc5d9ed63f32fe615646ab435b05b132ca91b"
   end
 
   resource "chardet" do
@@ -61,8 +66,8 @@ class Conan < Formula
   end
 
   resource "distro" do
-    url "https://files.pythonhosted.org/packages/21/7b/14198029b49abdf80c6b8aadd9862f863b683dc4d3c2418f01bc6fad9fa3/distro-1.1.0.tar.gz"
-    sha256 "722054925f339a39ca411a8c7079f390a41d42c422697bedf228f1a9c46ac1ee"
+    url "https://files.pythonhosted.org/packages/a6/a4/75064c334d8ae433445a20816b788700db1651f21bdb0af33db2aab142fe/distro-1.5.0.tar.gz"
+    sha256 "0e58756ae38fbd8fc3020d54badb8eae17c5b9dcbed388b17bb55b8a5928df92"
   end
 
   resource "fasteners" do
@@ -111,8 +116,8 @@ class Conan < Formula
   end
 
   resource "pluginbase" do
-    url "https://files.pythonhosted.org/packages/6e/f4/1db0a26c1c7fad81a1214ad1b02839a7bd98d8ba68f782f6edcc3d343441/pluginbase-0.7.tar.gz"
-    sha256 "c0abe3218b86533cca287e7057a37481883c07acef7814b70583406938214cc8"
+    url "https://files.pythonhosted.org/packages/3d/3c/fe974b4f835f83cc46966e04051f8708b7535bac28fbc0dcca1ee0c237b8/pluginbase-1.0.0.tar.gz"
+    sha256 "497894df38d0db71e1a4fbbfaceb10c3ef49a3f95a0582e11b75f8adaa030005"
   end
 
   resource "pycparser" do
@@ -156,18 +161,18 @@ class Conan < Formula
   end
 
   resource "six" do
-    url "https://files.pythonhosted.org/packages/21/9f/b251f7f8a76dec1d6651be194dfba8fb8d7781d10ab3987190de8391d08e/six-1.14.0.tar.gz"
-    sha256 "236bdbdce46e6e6a3d61a337c0f8b763ca1e8717c03b369e87a7ec7ce1319c0a"
+    url "https://files.pythonhosted.org/packages/6b/34/415834bfdafca3c5f451532e8a8d9ba89a21c9743a0c59fbd0205c7f9426/six-1.15.0.tar.gz"
+    sha256 "30639c035cdb23534cd4aa2dd52c3bf48f06e5f4a941509c8bafd8ce11080259"
   end
 
   resource "tqdm" do
-    url "https://files.pythonhosted.org/packages/3c/17/229e06a959dc41b85be2e372096b2637e51de5f84afc58b3e588f1826c80/tqdm-4.47.0.tar.gz"
-    sha256 "63ef7a6d3eb39f80d6b36e4867566b3d8e5f1fe3d6cb50c5e9ede2b3198ba7b7"
+    url "https://files.pythonhosted.org/packages/7c/a2/4cc95d7766a5d17ea2541d88da357d5905f75b6dbdfd17dfffd6c37647ae/tqdm-4.48.2.tar.gz"
+    sha256 "564d632ea2b9cb52979f7956e093e831c28d441c11751682f84c86fc46e4fd21"
   end
 
   resource "urllib3" do
-    url "https://files.pythonhosted.org/packages/05/8c/40cd6949373e23081b3ea20d5594ae523e681b6f472e600fbc95ed046a36/urllib3-1.25.9.tar.gz"
-    sha256 "3018294ebefce6572a474f0604c2021e33b3fd8006ecd11d62107a5d2a963527"
+    url "https://files.pythonhosted.org/packages/81/f4/87467aeb3afc4a6056e1fe86626d259ab97e1213b1dfec14c7cb5f538bf0/urllib3-1.25.10.tar.gz"
+    sha256 "91056c15fa70756691db97756772bb1eb9678fa585d9184f24534b100dc60f4a"
   end
 
   def install

@@ -1,25 +1,21 @@
 class Talisman < Formula
   desc "Tool to detect and prevent secrets from getting checked in"
   homepage "https://thoughtworks.github.io/talisman/"
-  url "https://github.com/thoughtworks/talisman",
-      using:    :git,
-      tag:      "v1.3.0",
-      revision: "01d957c30db6a1db844627b447a96887b53f4032"
+  url "https://github.com/thoughtworks/talisman/archive/v1.8.0.tar.gz"
+  sha256 "12dbf3b314ae0ca0f0b66ce2da229e7e5d1a7ae1ae2f233630ed4381cc3aa074"
   license "MIT"
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "9eb4f610bb1a9df059215ff73b7824e41843d4533f7c7fb0c54a63955bacb36f" => :catalina
-    sha256 "226b694a1e3619ec361fd49be1f502e7608fa6cef23c0ffaa1eedeff93131173" => :mojave
-    sha256 "953b5dfcb93d7344444460d695dbaba06f928194307d7bd43b17ecbf2f53618c" => :high_sierra
+    sha256 "8758511aeed8d27bcaa43e9bd9ec26c590a9fc37521928e3fa51e83c9b428437" => :catalina
+    sha256 "415556d7b5452882edd12d6960064dba3817f96813a10647c72b7b3d9c47bd0a" => :mojave
+    sha256 "bf9faf2467cc4471ab2ff610c7b846263396f571e4f99d44e33716753f1af39b" => :high_sierra
   end
 
   depends_on "go" => :build
-  depends_on "gox" => :build
 
   def install
-    system "./build"
-    bin.install "./talisman_darwin_amd64" => "talisman"
+    system "go", "build", *std_go_args, "-ldflags", "-X main.Version=#{version}"
   end
 
   test do

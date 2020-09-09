@@ -5,6 +5,10 @@ class Fceux < Formula
   sha256 "4be6dda9a347f941809a3c4a90d21815b502384adfdd596adaa7b2daf088823e"
   revision 4
 
+  livecheck do
+    url :stable
+  end
+
   bottle do
     cellar :any
     sha256 "7c7550b97011321d5d48f8f689c7158223aee5054698a6c707a185404e469e35" => :catalina
@@ -18,8 +22,8 @@ class Fceux < Formula
   depends_on "gtk+3"
   depends_on "sdl"
 
-  # does not build anymore: the Scons buildscripts rely on Python2 syntax.
-  disable!
+  # Does not build: some build scripts rely on Python 2 syntax
+  disable! because: :does_not_build
 
   # Fix "error: ordered comparison between pointer and zero"
   if DevelopmentTools.clang_build_version >= 900

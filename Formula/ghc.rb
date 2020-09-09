@@ -8,11 +8,16 @@ class Ghc < Formula
   url "https://downloads.haskell.org/~ghc/8.10.1/ghc-8.10.1-src.tar.xz"
   sha256 "4e3b07f83a266b3198310f19f71e371ebce97c769b14f0d688f4cbf2a2a1edf5"
   license "BSD-3-Clause"
+  revision 1
+
+  livecheck do
+    url :stable
+  end
 
   bottle do
-    sha256 "0771a43a5fd75ac8f3814367e0b99b27881b6730ced580eca109516aa250be4a" => :catalina
-    sha256 "12b0bfdf7570a348bda4ff916f3319a30c8cd82957725a78ba0ef25a1e42fdcc" => :mojave
-    sha256 "ab8ed6381773c90a5687843743b67e80ea7305cbebf056d0c1cceedb0ecc3490" => :high_sierra
+    sha256 "a7bb4f707d08e220f4c94a48eebb142c59061eef0bb059cd01bed8d4aed7a775" => :catalina
+    sha256 "f37c3a131aa50e5a60ec3377ae3fabcfeb1e6b5aa9596061c4f264b586dde49a" => :mojave
+    sha256 "2a46799075c511b890069be59323d711791767922267bf71ac0eeac36ca6cebc" => :high_sierra
   end
 
   head do
@@ -42,8 +47,15 @@ class Ghc < Formula
   # "This is a distribution for Mac OS X, 10.7 or later."
   # A binary of ghc is needed to bootstrap ghc
   resource "binary" do
-    url "https://downloads.haskell.org/~ghc/8.10.1/ghc-8.10.1-x86_64-apple-darwin.tar.xz"
-    sha256 "65b1ca361093de4804a7e40b3e68178e1ef720f84f743641ec8d95e56a45b3a8"
+    on_macos do
+      url "https://downloads.haskell.org/~ghc/8.10.1/ghc-8.10.1-x86_64-apple-darwin.tar.xz"
+      sha256 "65b1ca361093de4804a7e40b3e68178e1ef720f84f743641ec8d95e56a45b3a8"
+    end
+
+    on_linux do
+      url "https://downloads.haskell.org/~ghc/8.10.1/ghc-8.10.1-x86_64-deb9-linux.tar.xz"
+      sha256 "d1cf7886f27af070f3b7dbe1975a78b43ef2d32b86362cbe953e79464fe70761"
+    end
   end
 
   def install
@@ -63,7 +75,7 @@ class Ghc < Formula
     # is mandatory or else you'll get "illegal text relocs" errors.
     resource("gmp").stage do
       system "./configure", "--prefix=#{gmp}", "--with-pic", "--disable-shared",
-                            "--build=#{Hardware.oldest_cpu}-apple-darwin#{`uname -r`.to_i}"
+                            "--build=#{Hardware.oldest_cpu}-apple-darwin#{OS.kernel_version.major}"
       system "make"
       system "make", "install"
     end
@@ -116,6 +128,7 @@ class Ghc < Formula
 
     ENV.deparallelize { system "make", "install" }
     Dir.glob(lib/"*/package.conf.d/package.cache") { |f| rm f }
+    Dir.glob(lib/"*/package.conf.d/package.cache.lock") { |f| rm f }
   end
 
   def post_install

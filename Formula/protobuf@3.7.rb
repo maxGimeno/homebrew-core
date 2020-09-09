@@ -4,6 +4,7 @@ class ProtobufAT37 < Formula
   url "https://github.com/protocolbuffers/protobuf.git",
       tag:      "v3.7.1",
       revision: "6973c3a5041636c1d8dc5f7f6c8c1f3c15bc63d6"
+  license "BSD-3-Clause"
   revision 1
 
   bottle do
@@ -16,7 +17,7 @@ class ProtobufAT37 < Formula
   keg_only :versioned_formula
 
   # https://github.com/Homebrew/homebrew-core/pull/54471#issuecomment-627430555
-  disable!
+  disable! because: :unmaintained
 
   depends_on "autoconf" => :build
   depends_on "automake" => :build
